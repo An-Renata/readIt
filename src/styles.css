@@ -23,7 +23,8 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
-
+/* HEADER CSS */
+/* GREET USER / SEARCH BAR / LOG OUT BTN */
 .container {
   max-width: 120rem;
   height: 100vh;
@@ -37,7 +38,7 @@ body {
 }
 
 .greet-user {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 300;
   text-align: center;
   padding: 10px;
@@ -47,7 +48,7 @@ body {
   display: flex;
   border: 2px solid var(--bright-blue-color);
   border-radius: 10px;
-  padding: 5px;
+  padding: 2px;
 }
 #search-book {
   border: none;
@@ -64,4 +65,81 @@ body {
   width: 6rem;
   justify-self: center;
   font-weight: 300;
+}
+
+/* MAIN WINDOW STYLES */
+.container-main {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+}
+
+/* CURRENTLY READING COLUMN */
+.currently-reading {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  row-gap: 5px;
+  border: 1px solid var(--bright-yellow-color);
+  border-top: none;
+}
+/* CHANGE  */
+.img-box {
+  height: 17rem;
+  background: linear-gradient(
+    to right bottom,
+    var(--bright-yellow-color),
+    var(--red-color)
+  );
+  overflow: hidden;
+}
+
+.book-cover-img {
+  max-width: 120px;
+  display: block;
+  margin: auto;
+}
+
+.book-title {
+  font-size: 1.6rem;
+}
+
+.book-author {
+  font-size: 1.4rem;
+  border-bottom: 1px solid var(--bright-yellow-color);
+  margin-bottom: 5px;
+}
+
+.book-description {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+.book-rating {
+  text-align: center;
+}
+.book-rating-num {
+  margin-left: 5px;
+}
+
+.btn {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-size: 1.3rem;
+  border: 1px solid var(--bright-yellow-color);
+  letter-spacing: 1.2px;
+}
+
+.btn-finished {
+  background-color: var(--bright-yellow-color);
+}
+.btn-finished:hover,
+.btn-cancel:hover {
+  background-color: #fff;
 }
