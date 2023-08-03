@@ -21,6 +21,37 @@
     <script defer src="src/script.js"></script>
   </head>
   <body>
-    <img src="img/login-page-icon.svg" alt="" />
+    <div class="container">
+      <header class="header">
+        <h1 class="greet-user">Hello, {username}</h1>
+        <div class="search-bar">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+            style="width: 20px; margin-right: 10px"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+          <input
+            type="text"
+            name="search"
+            id="search-book"
+            placeholder="Search..."
+            size="100"
+            autocomplete="off"
+          />
+        </div>
+        <button class="btn-log-out">Log out</button>
+      </header>
+      <main></main>
+    </div>
   </body>
 </html>

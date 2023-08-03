@@ -1,5 +1,67 @@
 /* font-family: 'Corben', cursive;
 font-family: 'Heebo', sans-serif; */
-/* #CBF9F6 (sviesiai melyna)
-#F6C120 (sviesiai geltona/ruda)
-#EA5167 (raudona) */
+/* Declaring css variables to easy access properties */
+:root {
+  --main-font-color: #343a40;
+  --bright-blue-color: #cbf9f6;
+  --bright-yellow-color: #f6c120;
+  --red-color: #ea5167;
+}
+
+html {
+  /* 10px */
+  font-size: 62.5%;
+}
+body {
+  font-size: 1.6rem;
+  width: 100vw;
+  font-family: "Heebo", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 120rem;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  padding: 20px;
+}
+
+.greet-user {
+  font-size: 2rem;
+  font-weight: 300;
+  text-align: center;
+  padding: 10px;
+}
+
+.search-bar {
+  display: flex;
+  border: 2px solid var(--bright-blue-color);
+  border-radius: 10px;
+  padding: 5px;
+}
+#search-book {
+  border: none;
+}
+#search-book:focus {
+  outline: none;
+}
+
+.btn-log-out {
+  font-size: 1.6rem;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 6rem;
+  justify-self: center;
+  font-weight: 300;
+}
