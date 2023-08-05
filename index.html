@@ -78,8 +78,10 @@
               <p class="book-rating">
                 ⭐⭐⭐⭐<span class="book-rating-num">4.5</span>
               </p>
-              <button class="btn btn-curr-box btn-finished">Finished!</button>
-              <button class="btn btn-curr-box btn-cancel">
+              <button class="btn btn-curr-box btn-finished transition">
+                Finished!
+              </button>
+              <button class="btn btn-curr-box btn-cancel transition">
                 Cancel reading
               </button>
             </div>
@@ -107,15 +109,26 @@
               </p>
             </div>
             <div class="btn-main-book">
-              <button class="add-btn add-to-read">Read</button>
-              <button class="add-btn add-want-to-read">Wanto to read</button>
-              <button class="add-btn add-currently-reading">
+              <button class="add-btn add-want-to-read transition">
+                Wanto to read
+              </button>
+              <button class="add-btn add-currently-reading transition">
                 Currently reading
               </button>
+              <button class="add-btn add-to-read transition">Read</button>
             </div>
           </div>
         </main>
-        <aside class="aside-box"></aside>
+        <aside class="aside-box">
+          <button class="btn-read transition">
+            <img src="img/read-100.png" alt="book icon" />
+            <p>Read</p>
+          </button>
+          <button class="btn-want-to-read transition">
+            <img src="img/want-to-read-100.png" alt="open book" srcset="" />
+            <p>Want to read</p>
+          </button>
+        </aside>
       </div>
     </div>
   </body>

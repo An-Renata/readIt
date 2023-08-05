@@ -3,7 +3,8 @@ font-family: 'Heebo', sans-serif; */
 /* Declaring css variables to easy access properties */
 :root {
   --main-font-color: #343a40;
-  --bright-blue-color: #cbf9f6;
+  --bright-sand-color: #b4aa99;
+  --bright-cement-color: #eee0da;
   --bright-yellow-color: #f6c120;
   --red-color: #ea5167;
   --border-radius-box: 10px;
@@ -25,6 +26,9 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+.transition {
+  transition: all 0.3s;
+}
 /* HEADER CSS */
 /* GREET USER / SEARCH BAR / LOG OUT BTN */
 .container {
@@ -42,7 +46,6 @@ body {
 .greet-user {
   font-size: 1.8rem;
   font-weight: 300;
-  text-align: center;
 }
 
 .search-bar {
@@ -81,11 +84,11 @@ body {
   font-weight: 300;
   letter-spacing: 0.1rem;
   margin-bottom: 0.8rem;
-  /* border-bottom: 1px solid var(--bright-blue-color); */
 }
 .currently-reading {
-  border-radius: var(--border-radius-box);
+  border-radius: var(--border-radius-box) var(--border-radius-box) 0 0;
   overflow: hidden;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .book-info {
@@ -148,6 +151,10 @@ body {
 .btn-finished {
   background-color: var(--bright-yellow-color);
 }
+.btn-cancel {
+  padding: 4px;
+}
+
 .btn-finished:hover,
 .btn-cancel:hover {
   background-color: #fff;
@@ -155,8 +162,8 @@ body {
 
 /* BOOK SEARCHES WINDOW */
 .render-book-window {
-  border: 1px solid red;
   border-radius: var(--border-radius-box);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -195,9 +202,52 @@ body {
   background-color: #fff;
   cursor: pointer;
   border-radius: var(--border-radius-btn);
-  transition: all 0.2s;
 }
 
-.add-btn:hover {
-  background-color: var(--bright-blue-color);
+.add-want-to-read {
+  background-color: var(--bright-yellow-color);
+}
+
+.add-want-to-read:hover {
+  background-color: #fad054;
+}
+
+.add-to-read {
+  background-color: var(--bright-sand-color);
+}
+.add-to-read:hover {
+  background-color: #c1baaf;
+}
+
+.add-currently-reading {
+  background-color: var(--bright-cement-color);
+}
+.add-currently-reading:hover {
+  background-color: #ece5e2;
+}
+
+/* ASIDE BOX */
+.aside-box {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  align-items: center;
+  border-radius: var(--border-radius-box);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.btn-read,
+.btn-want-to-read {
+  cursor: pointer;
+  width: min-content;
+  text-transform: uppercase;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-box);
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+
+.btn-read:hover,
+.btn-want-to-read:hover {
+  border: 1px solid var(--red-color);
 }
