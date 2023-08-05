@@ -48,7 +48,7 @@
             name="search"
             id="search-book"
             placeholder="Search..."
-            size="100"
+            size="95"
             autocomplete="off"
           />
         </div>
@@ -56,30 +56,65 @@
       </header>
       <div class="container-main">
         <!-- Making layout, all values will be changed according to API call -->
-        <section class="currently-reading">
+        <div>
           <h2 class="currently-reading-heading">currently reading</h2>
-          <div class="img-box">
+          <section class="currently-reading">
+            <div class="img-box">
+              <img
+                class="book-cover-img"
+                src="https://m.media-amazon.com/images/I/91OINeHnJGL._AC_UF1000,1000_QL80_.jpg"
+                alt="book cover photo"
+              />
+            </div>
+            <div class="book-info">
+              <h3 class="book-title">
+                Harry Potter and the chamber of secrects
+              </h3>
+              <p class="book-author">J.K Rowling</p>
+              <p class="book-description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Error
+                omnis alias, cupiditate vitae praesentium
+              </p>
+              <p class="book-rating">
+                ⭐⭐⭐⭐<span class="book-rating-num">4.5</span>
+              </p>
+              <button class="btn btn-curr-box btn-finished">Finished!</button>
+              <button class="btn btn-curr-box btn-cancel">
+                Cancel reading
+              </button>
+            </div>
+          </section>
+        </div>
+        <main class="render-book-window">
+          <!-- SEARCH RESULTS -->
+          <div class="search-result">
             <img
-              class="book-cover-img"
+              class="search-book-cover"
               src="https://m.media-amazon.com/images/I/91OINeHnJGL._AC_UF1000,1000_QL80_.jpg"
               alt="book cover photo"
             />
+            <div class="book-info-searches">
+              <h3 class="book-title">
+                Harry Potter and the chamber of secrects
+              </h3>
+              <p class="book-author-search">J.K Rowling</p>
+              <p class="book-description-search">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Error
+                omnis alias, cupiditate vitae praesentium
+              </p>
+              <p class="search-book-rating">
+                ⭐⭐⭐⭐<span class="search-book-rating-num">4.5</span>
+              </p>
+            </div>
+            <div class="btn-main-book">
+              <button class="add-btn add-to-read">Read</button>
+              <button class="add-btn add-want-to-read">Wanto to read</button>
+              <button class="add-btn add-currently-reading">
+                Currently reading
+              </button>
+            </div>
           </div>
-          <div class="book-info">
-            <h3 class="book-title">Harry Potter and the chamber of secrects</h3>
-            <p class="book-author">J.K Rowling</p>
-            <p class="book-description">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Error
-              omnis alias, cupiditate vitae praesentium
-            </p>
-            <p class="book-rating">
-              ⭐⭐⭐⭐<span class="book-rating-num">4.5</span>
-            </p>
-            <button class="btn btn-curr-box btn-finished">Finished!</button>
-            <button class="btn btn-curr-box btn-cancel">Cancel reading</button>
-          </div>
-        </section>
-        <main class="render-book-window"></main>
+        </main>
         <aside class="aside-box"></aside>
       </div>
     </div>
