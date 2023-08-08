@@ -23,7 +23,9 @@ const bookSearchResultHTML = (book) => {
           book.ratings_avg
         )}</span>
       </p>
-      <button class="show-more-btn">Show more</button>
+      <button class="show-more-btn"  data-book-key=${
+        book.book_key
+      }>Show more</button>
     </div>
     <div class="btn-main-book">
       <button class="add-btn add-want-to-read transition">
@@ -38,4 +40,20 @@ const bookSearchResultHTML = (book) => {
 `;
 };
 
-export { bookSearchResultHTML };
+const renderShowMoreInfo = (book) => {
+  return `
+    <div class="show-more-container">
+      <div class="read-more-book-info">
+        <h3 class="read-more-title">${book.title}</h3>
+        <p class="read-more-publish">Published: ${book.place}</p>
+      </div>
+      <div class="read-more-info">
+        <p>${book.characters}</p>
+        <p class="description-read-more">
+          ${book.description}
+        </p>
+        <p>${book.type}</p>
+      </div>
+    </div>`;
+};
+export { bookSearchResultHTML, renderShowMoreInfo };

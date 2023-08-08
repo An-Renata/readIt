@@ -4,23 +4,36 @@
 const fetchBookInfo = async function (searchStr) {
   try {
     const response = await fetch(
-      `https://openlibrary.org/search.json?title=${searchStr}`
+      `https://openlibrary.org/search.json?title=${searchStr}&limit=4`
     );
 
     const data = await response.json();
 
     console.log(data);
 
-    const booksData = data.docs.map((book) => ({
-      book_key: book.key ?? "N/A",
-      title: book.title ?? "N/A",
-      author_name: book.author_name?.[0] ?? "N/A",
-      author_key: book.author_key ?? "N/A",
-      publish_year: book.first_publish_year ?? "N/A",
-      ratings_avg: book.ratings_average ?? "N/A",
-      cover_id: book.cover_edition_key ?? "N/A",
-    }));
+    const booksData = await Promise.all(
+      data.docs.map(async (book) => {
+        const descriptionInfo = await fetchBookDescription(book.key);
+        const bookCover = await fetchBookCover(book.cover_edition_key);
 
+        const bookData = {
+          book_key: book.key ?? "N/A",
+          title: book.title ?? "N/A",
+          author_name: book.author_name?.[0] ?? "N/A",
+          author_key: book.author_key ?? "N/A",
+          publish_year: book.first_publish_year ?? "N/A",
+          ratings_avg: book.ratings_average ?? "N/A",
+          cover_id: book.cover_edition_key ?? "N/A",
+          description:
+            descriptionInfo.description ?? "No description available",
+          coverURL: bookCover.url ?? "No image",
+        };
+
+        console.log(bookData);
+        return bookData;
+      })
+    );
+    // return object about book data
     return booksData;
   } catch (err) {
     console.error("Request failed", err);
@@ -36,8 +49,12 @@ const fetchBookDescription = async function (bookKey) {
 
     const descriptionInfo = {
       description: data.description ?? "No description availabe",
+      title: data.title,
+      place: data.subject_places ?? "No available info",
+      characters: data.subject_people ?? "No available info",
+      type: data.subjects ?? "No available info",
     };
-
+    console.log(descriptionInfo);
     return descriptionInfo;
   } catch (err) {
     console.error("Book description request failed", err);
