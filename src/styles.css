@@ -275,3 +275,42 @@ body {
 .btn-want-to-read:hover {
   border: 1px solid var(--red-color);
 }
+
+/* ............................ */
+/* SHOW MORE BTN BOX */
+/* add blur when show more btn is pressed */
+.active {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+}
+
+.read-more-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50rem;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+
+  /* change on the click */
+  display: none;
+}
+.show-more-container {
+  padding: 10px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border: 1px solid red;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.read-more-title,
+.read-more-publish {
+  margin-top: 4px;
+  font-size: 1.3rem;
+}
+.description-read-more {
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
