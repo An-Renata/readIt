@@ -165,25 +165,26 @@ body {
   border-radius: var(--border-radius-box);
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
-  row-gap: 10px;
+  row-gap: 5px;
+  height: 80vh;
+  overflow-y: scroll;
 }
 
 .search-result {
-  /* display: flex;
-  flex-shrink: 1; */
   display: grid;
   grid-template-columns: 15% 4fr 1fr;
 }
 
-.book-description-search {
-  max-height: 5rem;
-  overflow: hidden;
-}
-.book-author-search,
-.book-description-search {
-  margin: 8px 0;
+.book-title {
   font-size: 1.3rem;
+}
+
+.publish-year,
+.book-author-search {
+  font-size: 1.1rem;
+  margin: 5px 0;
 }
 
 .search-book-cover {
@@ -191,7 +192,24 @@ body {
 }
 
 .book-info-searches {
-  padding: 20px;
+  padding: 4px;
+  font-size: 1.2rem;
+}
+
+.search-book-rating {
+  margin: 5px 0;
+}
+.show-more-btn {
+  padding: 5px 10px;
+  background-color: var(--bright-cement-color);
+  border: 1px solid var(--bright-yellow-color);
+  border-radius: var(--border-radius-btn);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.show-more-btn:hover {
+  background-color: var(--bright-sand-color);
 }
 .btn-main-book {
   display: flex;
