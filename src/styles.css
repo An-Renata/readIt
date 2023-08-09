@@ -159,7 +159,6 @@ body {
 .btn-cancel:hover {
   background-color: #fff;
 }
-
 /* BOOK SEARCHES WINDOW */
 .render-book-window {
   border-radius: var(--border-radius-box);
@@ -168,8 +167,8 @@ body {
   overflow: hidden;
   flex-direction: column;
   row-gap: 5px;
-  height: 80vh;
-  overflow-y: scroll;
+  /* height: 80vh;
+  overflow-y: scroll; */
 }
 
 .search-result {
@@ -192,7 +191,8 @@ body {
 }
 
 .book-info-searches {
-  padding: 4px;
+  padding: 10px;
+  margin-left: 10px;
   font-size: 1.2rem;
 }
 
@@ -277,23 +277,24 @@ body {
 }
 
 /* ............................ */
-/* SHOW MORE BTN BOX */
 /* add blur when show more btn is pressed */
 .active {
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   backdrop-filter: blur(2px);
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
-
+/* SHOW MORE BTN BOX */
 .read-more-box {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   width: 50rem;
   transform: translate(-50%, -50%);
-  background-color: #fff;
+  border-radius: var(--border-radius-box);
+  background: linear-gradient(to right, #eee0da, #ffffffd0);
+  border: 2px solid var(--bright-yellow-color);
   transition: all 0.2s;
   /* change on the click */
   display: none;
@@ -301,37 +302,27 @@ body {
 .show-more-container {
   padding: 20px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
-  border: 2px solid var(--bright-yellow-color);
   display: flex;
-
   flex-direction: column;
 }
 
 .show-more-container span {
   font-weight: 600;
 }
-.read-more-title,
-.read-more-place,
-.characters,
-.description-read-more,
-.book-type {
-  margin-bottom: 1rem;
+
+.read-more-book-info p {
+  font-size: 1.2rem;
+  line-height: 2;
+  text-transform: capitalize;
 }
+
 .read-more-title {
   font-size: 2rem;
+  line-height: 2;
 }
-.read-more-place {
-  font-size: 1.2rem;
-}
-.characters {
-  font-size: 1.2rem;
-}
+
 .description-read-more {
   font-size: 1.3rem;
+  flex-wrap: wrap;
   margin-top: 10px;
-}
-.book-type {
-  font-size: 1.2rem;
-  text-transform: capitalize;
 }

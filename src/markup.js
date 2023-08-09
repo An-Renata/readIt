@@ -5,11 +5,11 @@ const bookSearchResultHTML = (book) => {
   return `
   <li class="search-result">
     <div>
-      <img
-        class="search-book-cover"
-      //  src="${book.coverURL ? book.coverURL : "#"}"
-        alt="book cover photo"
-      />
+      ${
+        book.coverURL
+          ? `<img class="search-book-cover" src="${book.coverURL}" alt="book cover photo" />`
+          : `<div class=no-image-box">No image</div>`
+      }
     </div>
     <div class="book-info-searches">
       <h3 class="book-title">${book.title}
@@ -46,13 +46,13 @@ const renderShowMoreInfo = (book) => {
       <div class="read-more-book-info">
         <h3 class="read-more-title">${book.title}</h3>
         <p class="read-more-place"><span>Took place:</span> ${book.place}</p>
+        <p class="book-type"><span>Book subject:</span> ${book.type} </p>
+        <p class="characters"><span>Characters:</span> ${book.characters}</p>
       </div>
       <div class="read-more-info">
-        <p class="characters"><span>Characters:</span> ${book.characters}</p>
         <p class="description-read-more">
           ${book.description}
         </p>
-        <p class="book-type"><span>Book subject:</span> ${book.type} </p>
       </div>
     </div>`;
 };
