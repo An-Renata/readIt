@@ -4,12 +4,10 @@
 const fetchBookInfo = async function (searchStr) {
   try {
     const response = await fetch(
-      `https://openlibrary.org/search.json?title=${searchStr}&limit=4`
+      `https://openlibrary.org/search.json?title=${searchStr}&limit=5`
     );
 
     const data = await response.json();
-
-    console.log(data);
 
     const booksData = await Promise.all(
       data.docs.map(async (book) => {
@@ -29,7 +27,6 @@ const fetchBookInfo = async function (searchStr) {
           coverURL: bookCover.url ?? "No image",
         };
 
-        console.log(bookData);
         return bookData;
       })
     );
@@ -50,11 +47,12 @@ const fetchBookDescription = async function (bookKey) {
     const descriptionInfo = {
       description: data.description ?? "No description availabe",
       title: data.title,
-      place: data.subject_places ?? "No available info",
-      characters: data.subject_people ?? "No available info",
-      type: data.subjects ?? "No available info",
+      place: data.subject_places?.slice(0, 3).join(", ") ?? "No available info",
+      characters:
+        data.subject_people?.slice(0, 3).join(", ") ?? "No available info",
+      type: data.subjects?.slice(0, 3).join(", ") ?? "No available info",
     };
-    console.log(descriptionInfo);
+
     return descriptionInfo;
   } catch (err) {
     console.error("Book description request failed", err);

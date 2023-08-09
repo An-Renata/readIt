@@ -3,7 +3,7 @@ import { formatRating } from "./helpers.js";
 // html markup to insert data about the book
 const bookSearchResultHTML = (book) => {
   return `
-  <div class="search-result">
+  <li class="search-result">
     <div>
       <img
         class="search-book-cover"
@@ -36,7 +36,7 @@ const bookSearchResultHTML = (book) => {
       </button>
       <button class="add-btn add-to-read transition">Finished</button>
     </div>
-  </div>
+  </li>
 `;
 };
 
@@ -45,14 +45,14 @@ const renderShowMoreInfo = (book) => {
     <div class="show-more-container">
       <div class="read-more-book-info">
         <h3 class="read-more-title">${book.title}</h3>
-        <p class="read-more-publish">Published: ${book.place}</p>
+        <p class="read-more-place"><span>Took place:</span> ${book.place}</p>
       </div>
       <div class="read-more-info">
-        <p>${book.characters}</p>
+        <p class="characters"><span>Characters:</span> ${book.characters}</p>
         <p class="description-read-more">
           ${book.description}
         </p>
-        <p>${book.type}</p>
+        <p class="book-type"><span>Book subject:</span> ${book.type} </p>
       </div>
     </div>`;
 };
