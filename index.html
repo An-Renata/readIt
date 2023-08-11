@@ -24,19 +24,7 @@
     <!--? blurred bg when show more btn is pressed -->
     <div class="blurred-bg"></div>
     <!--? .......................................... -->
-     <div class="read-more-box">
-      <!-- <div class="show-more-container">
-        <div class="read-more-book-info">
-          <h3 class="read-more-title">${book.title}</h3>
-          <p class="read-more-publish">Published: ${book.place}</p>
-        </div>
-        <div class="read-more-info">
-          <p>${book.characters}</p>
-          <p class="description-read-more">${book.description}</p>
-          <p>${book.type}</p>
-        </div> -->
-      </div>
-    </div>
+
     <div class="container">
       <header class="header">
         <!-- display username using js when user ir logged in -->
@@ -105,9 +93,13 @@
         </div>
         <main>
           <div class="render-book-window">
-          <ul>
-            <!-- INPUT FROM JS SEARCH RESULTS -->
-          </ul>
+            <span class="spinner"></span>
+            <ul>
+              <!-- INPUT FROM JS SEARCH RESULTS -->
+            </ul>
+          </div>
+          <div class="read-more-box">
+            <!-- RENDER SHOW MORE -->
           </div>
         </main>
         <aside class="aside-box">

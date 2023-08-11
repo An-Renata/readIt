@@ -1,32 +1,39 @@
 // "use strict";
+// const fetch = require("node-fetch");
 
-import { fetchBookInfo, fetchBookDescription, fetchBookCover } from "./api.js";
+import { renderMoreInfo, getBook } from "./api.js";
 import { formatRating } from "./helpers.js";
-import { bookSearchResultHTML, renderShowMoreInfo } from "./markup.js";
+import { renderShowMoreInfo, renderSearchResults } from "./markup.js";
 
 // variable to get user search input value and render windown
 const searchBar = document.getElementById("search-book");
 const renderBooks = document.querySelector(".render-book-window");
+const spinner = document.querySelector(".spinner");
 
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
   if (e.key === "Enter" && searchBar.value !== "") {
-    // fetch main info about the book
-    const booksData = await fetchBookInfo(searchBar.value.replaceAll(" ", "+"));
-    console.log(booksData);
-    // handle error if no book is found
-    if (booksData.length === 0) {
-      alert("no book found");
+    try {
+      spinner.classList.add("loader");
+
+      const searchResults = await getBook(searchBar.value);
+
+      if (searchResults.length === 0) {
+        alert("No book found!");
+        spinner.classList.remove("loader");
+        return;
+      }
+      renderBooks.innerHTML = "";
+      searchBar.value = "";
+
+      searchResults.forEach((book) => {
+        const html = renderSearchResults(book);
+        renderBooks.insertAdjacentHTML("beforeend", html);
+        spinner.classList.remove("loader");
+      });
+    } catch (err) {
+      console.log("error occured, ", err);
     }
-    // clear the window before showing search results
-    renderBooks.innerHTML = "";
-    searchBar.value = "";
-    // render data based on the search results
-    booksData.forEach((book) => {
-      // render search results on the main window
-      const html = bookSearchResultHTML(book);
-      renderBooks.insertAdjacentHTML("beforeend", html);
-    });
   }
 });
 
@@ -38,51 +45,29 @@ document.addEventListener("click", async (e) => {
   const bgBlur = document.querySelector(".blurred-bg");
 
   if (btnShowMore) {
-    const bookKey = btnShowMore.dataset.bookKey;
-    const bookData = await fetchBookDescription(bookKey);
+    try {
+      spinner.classList.add("loader");
+      const key = btnShowMore.dataset.bookKey;
 
-    const html = renderShowMoreInfo(bookData);
+      const bookData = await renderMoreInfo(key);
 
-    readmoreBox.innerHTML = html;
+      const html = renderShowMoreInfo(bookData);
+      console.log(html);
+      readmoreBox.innerHTML = html;
 
-    bgBlur.classList.add("active");
-    readmoreBox.style.display = "block";
+      bgBlur.classList.add("active");
+      readmoreBox.style.display = "block";
 
-    showMore = true;
+      showMore = true;
+    } catch (err) {
+      console.log("Error occured", err);
+    }
   }
 
   if (showMore && e.target.classList.contains("active")) {
     bgBlur.classList.remove("active");
     readmoreBox.style.display = "none";
+    spinner.classList.remove("loader");
     showMore = false;
   }
 });
-
-// INTERSECTION OBSERVER TO DEAL WITH DATA MORE EFFECTIVELY
-// const observerOptions = {
-//   root: renderBooks,
-//   threshold: 0.5,
-//   rootMargin: "0px",
-// };
-
-// const callback = async (entries) => {
-//   entries.forEach(async (entry) => {
-//     if (entry.isIntersecting) {
-//       const renderNewData = await fetchBookInfo(searchBar.value);
-
-//       renderNewData.forEach((book) => {
-//         const html = bookSearchResultHTML(book);
-//         renderBooks.insertAdjacentHTML("beforeend", html);
-//       });
-//     }
-//   });
-// };
-// const observer = new IntersectionObserver(callback, observerOptions);
-
-// // if (document.querySelectorAll(".search-result")) {
-// //   observer.observe(document.querySelectorAll(".search-result"));
-// // }
-// const searchResults = document.querySelectorAll(".search-result");
-// searchResults.forEach((result) => {
-//   observer.observe(result);
-// });

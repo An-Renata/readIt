@@ -1,31 +1,27 @@
 import { formatRating } from "./helpers.js";
 
 // html markup to insert data about the book
-const bookSearchResultHTML = (book) => {
+const renderSearchResults = (book) => {
   return `
   <li class="search-result">
     <div>
       ${
-        book.coverURL
-          ? `<img class="search-book-cover" src="${book.coverURL}" alt="book cover photo" />`
+        book.book_cover
+          ? `<img class="search-book-cover" src="${book.book_cover}" alt="book cover photo" />`
           : `<div class=no-image-box">No image</div>`
       }
     </div>
     <div class="book-info-searches">
       <h3 class="book-title">${book.title}
       </h3>
-      <p class="book-author-search">by ${book.author_name}</p>
+      <p class="book-author-search">by ${book.author}</p>
       <p class="publish-year">
-        Publish year: ${book.publish_year}
+        Publish year: ${book.published}
       </p>
-      <p class="search-book-rating">
-        ⭐⭐⭐⭐<span class="search-book-rating-num">${formatRating(
-          book.ratings_avg
-        )}</span>
+      <p class="pages">
+        Pages: ${book.pages}
       </p>
-      <button class="show-more-btn"  data-book-key=${
-        book.book_key
-      }>Show more</button>
+      <button class="show-more-btn" data-book-key=${book.key}>Show more</button>
     </div>
     <div class="btn-main-book">
       <button class="add-btn add-want-to-read transition">
@@ -40,14 +36,16 @@ const bookSearchResultHTML = (book) => {
 `;
 };
 
+// HTML markup when user clicks "Show more" button
 const renderShowMoreInfo = (book) => {
   return `
     <div class="show-more-container">
       <div class="read-more-book-info">
         <h3 class="read-more-title">${book.title}</h3>
-        <p class="read-more-place"><span>Took place:</span> ${book.place}</p>
-        <p class="book-type"><span>Book subject:</span> ${book.type} </p>
-        <p class="characters"><span>Characters:</span> ${book.characters}</p>
+        <p class="read-more-place"><span>Author: </span> ${book.author}</p>
+        <p class="read-more-place"><span>Publisher: </span> ${book.publisher}</p>
+        <p class="book-type"><span>Book subject:</span> ${book.subject} </p>
+        <p class="characters"><span>Language:</span> ${book.language}</p>
       </div>
       <div class="read-more-info">
         <p class="description-read-more">
@@ -56,4 +54,4 @@ const renderShowMoreInfo = (book) => {
       </div>
     </div>`;
 };
-export { bookSearchResultHTML, renderShowMoreInfo };
+export { renderShowMoreInfo, renderSearchResults };

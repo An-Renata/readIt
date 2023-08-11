@@ -1,71 +1,69 @@
 "use strict";
+const API_KEY = "50299_e67df3556f3eeab2c46a8ddb59daaadd";
 
-// async function to fetch main info about the book, return as an object
-const fetchBookInfo = async function (searchStr) {
+let headers = {
+  "Content-Type": "application/json",
+  Authorization: API_KEY,
+};
+
+const getBook = async (search) => {
   try {
-    const response = await fetch(
-      `https://openlibrary.org/search.json?title=${searchStr}&limit=5`
-    );
+    const res = await fetch(`https://api2.isbndb.com/books/${search}`, {
+      headers: headers,
+    });
 
-    const data = await response.json();
+    if (!res.ok) {
+      throw new Error(`Request failed with status: ${res.status}`);
+    }
+    const data = await res.json();
 
+    if (data.length === 0) {
+      return "No book found";
+    }
     const booksData = await Promise.all(
-      data.docs.map(async (book) => {
-        const descriptionInfo = await fetchBookDescription(book.key);
-        const bookCover = await fetchBookCover(book.cover_edition_key);
-
+      data.books.map(async (book) => {
+        // map through array to get info that I need
         const bookData = {
-          book_key: book.key ?? "N/A",
-          title: book.title ?? "N/A",
-          author_name: book.author_name?.[0] ?? "N/A",
-          author_key: book.author_key ?? "N/A",
-          publish_year: book.first_publish_year ?? "N/A",
-          ratings_avg: book.ratings_average ?? "N/A",
-          cover_id: book.cover_edition_key ?? "N/A",
-          description:
-            descriptionInfo.description ?? "No description available",
-          coverURL: bookCover.url ?? "No image",
+          author: book.authors ?? "No info",
+          published: book.date_published ?? "No info",
+          publisher: book.publisher ?? "No info",
+          book_cover: book.image,
+          pages: book.pages ?? "No info",
+          subject: book.subjects ?? "No info",
+          description: book.synopsis ?? "No info",
+          title: book.title,
+          language: book.language ?? "No info",
+          key: book.isbn13 ?? book.isbn ?? book.isbn10,
         };
 
         return bookData;
       })
     );
-    // return object about book data
+
     return booksData;
-  } catch (err) {
-    console.error("Request failed", err);
+  } catch (error) {
+    console.error("An error occurred:", error);
   }
 };
 
-// fetch description info about the book, using the book_key from fetchBookInfo
-const fetchBookDescription = async function (bookKey) {
-  try {
-    const response = await fetch(`https://openlibrary.org${bookKey}.json`);
+// fetch more info
+const renderMoreInfo = async function (key) {
+  // get key after search results rendered and use it to fetch more about book
+  const response = await fetch(`https://api2.isbndb.com/book/${key}`, {
+    headers: headers,
+  });
+  const data = await response.json();
 
-    const data = await response.json();
-
-    const descriptionInfo = {
-      description: data.description ?? "No description availabe",
-      title: data.title,
-      place: data.subject_places?.slice(0, 3).join(", ") ?? "No available info",
-      characters:
-        data.subject_people?.slice(0, 3).join(", ") ?? "No available info",
-      type: data.subjects?.slice(0, 3).join(", ") ?? "No available info",
-    };
-
-    return descriptionInfo;
-  } catch (err) {
-    console.error("Book description request failed", err);
-  }
+  // put related info to an object
+  const moreInfo = {
+    title: data.book.title,
+    author: data.book.authors ?? "No info",
+    publisher: data.book.publisher ?? "No info",
+    language: data.book.language ?? "No info",
+    subject: data.book.subjects?.slice(0, 3).join(", ") ?? "No info",
+    description: data.book.synopsis ?? "Description not available",
+  };
+  return moreInfo;
 };
-
-// fetch book cover jpg
-const fetchBookCover = async function (keyValue) {
-  const response = await fetch(
-    `https://covers.openlibrary.org/b/olid/${keyValue}-M.jpg`
-  );
-
-  return response;
-};
-
-export { fetchBookInfo, fetchBookDescription, fetchBookCover };
+// export api calls to access them from script.js
+export { renderMoreInfo, getBook };
