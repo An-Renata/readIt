@@ -1,5 +1,3 @@
-import { formatRating } from "./helpers.js";
-
 // html markup to insert data about the book
 const renderSearchResults = (book) => {
   return `
@@ -23,14 +21,18 @@ const renderSearchResults = (book) => {
       </p>
       <button class="show-more-btn" data-book-key=${book.key}>Show more</button>
     </div>
-    <div class="btn-main-book">
+    <div class="btn-main-book" data-book-key=${book.key}>
       <button class="add-btn add-want-to-read transition">
-        Wanto to read
+        Want to read
       </button>
-      <button class="add-btn add-currently-reading transition">
+      <button class="add-btn add-currently-reading transition" data-book-key=${
+        book.key
+      }>
         Currently reading
       </button>
-      <button class="add-btn add-to-read transition">Finished</button>
+      <button class="add-btn add-to-read transition" data-book-key=${
+        book.key
+      }>Finished</button>
     </div>
   </li>
 `;

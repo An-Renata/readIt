@@ -57,6 +57,7 @@ const renderMoreInfo = async function (key) {
   // put related info to an object
   const moreInfo = {
     title: data.book.title,
+    book_cover: data.book.image,
     author: data.book.authors ?? "No info",
     publisher: data.book.publisher ?? "No info",
     language: data.book.language ?? "No info",
