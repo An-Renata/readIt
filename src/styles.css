@@ -2,7 +2,7 @@
 font-family: 'Heebo', sans-serif; */
 /* Declaring css variables to easy access properties */
 :root {
-  --main-font-color: #343a40;
+  --main-font-color: hsl(210, 10%, 23%);
   --bright-sand-color: #b4aa99;
   --bright-cement-color: #eee0da;
   --bright-yellow-color: #f6c120;

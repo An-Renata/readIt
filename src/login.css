@@ -1,0 +1,83 @@
+.greet {
+  text-align: center;
+  font-size: 3rem;
+  margin-top: 10rem;
+  line-height: 0.8;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-weight: 600;
+}
+.greet span:first-child {
+  font-size: 1.8rem;
+  color: #f6c120;
+}
+
+.greet span {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+.login-container {
+  margin: 0 auto;
+  max-width: 30rem;
+  padding: 1.5rem;
+  border-radius: 5px;
+  background-color: #ffffffa3;
+}
+
+#video-login {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+.login-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 400;
+  letter-spacing: 0.1rem;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  font-size: 1.4rem;
+}
+.login-form input {
+  margin-bottom: 1.2rem;
+}
+.login {
+  margin-bottom: 0.5rem;
+}
+.login-input {
+  padding: 1.2rem;
+  border: 1px solid #f6c120;
+  border-radius: 5px;
+}
+
+.login-btn {
+  padding: 1rem;
+  /* on hover effect to avoid flicker */
+  border: 1px solid transparent;
+  background-color: #f6c120;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.1rem;
+  font-size: 1.2rem;
+}
+.login-btn:hover {
+  border: 1px solid #f6c120;
+  background-color: #fff;
+}
+
+.sign-up-link,
+span {
+  text-align: center;
+  font-size: 1.2rem;
+}

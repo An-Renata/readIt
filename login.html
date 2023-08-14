@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | readit</title>
+    <link rel="stylesheet" href="src/styles.css" />
+    <link rel="stylesheet" href="src/login.css" />
+  </head>
+  <body>
+    <video
+      src="login-reading.mp4"
+      type="video/mp4"
+      autoplay
+      muted
+      loop
+      id="video-login"
+    ></video>
+    <main>
+      <h1 class="greet">Welcome to read<span class="name-end">it</span></br><span>Track your reading with us</span></h1>
+      <div class="login-container">
+        <h2>Login</h2>
+        <form action="/login" method="post">
+          <div class="login-form">
+            <label for="username" class="login">Username</label>
+            <input
+              type="text"
+              placeholder="Enter Username"
+              name="username"
+              required
+              autocomplete="off"
+              class="login-input login-username"
+            />
+            <label for="password" class="login">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="login-input login-password"
+              placeholder="Enter Password"
+              required
+            />
+            <button type="submit" class="login-btn">Login</button>
+          </div>
+        </form>
+        <p class="sign-up-link">
+          Not a member? <span><a href="register.html">Signup now</a></span>
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
