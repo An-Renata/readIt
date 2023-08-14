@@ -59,8 +59,7 @@
   border: 1px solid #f6c120;
   border-radius: 5px;
 }
-
-.login-btn {
+.btn-user {
   padding: 1rem;
   /* on hover effect to avoid flicker */
   border: 1px solid transparent;
@@ -71,6 +70,7 @@
   letter-spacing: 0.1rem;
   font-size: 1.2rem;
 }
+
 .login-btn:hover {
   border: 1px solid #f6c120;
   background-color: #fff;
