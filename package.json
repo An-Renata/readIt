@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "flask": "^0.2.10",
+    "python3": "^0.0.1",
+    "sqlite3": "^5.1.6"
+  },
+  "name": "readit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
