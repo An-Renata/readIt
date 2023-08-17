@@ -31,18 +31,21 @@
               type="text"
               placeholder="Enter Username"
               name="username"
-              required
               autocomplete="off"
               class="login-input login-username"
             />
+
+            <small>{{ fail_username }}</small>
             <label for="password" class="login">Password</label>
             <input
               type="password"
               name="password"
               class="login-input login-password"
               placeholder="Enter Password"
-              required
             />
+
+            <small>{{ fail_password }}</small>
+            <small>{{ no_user }}</small>
             <button type="submit" class="btn-user login-btn">Login</button>
           </div>
         </form>
@@ -51,8 +54,5 @@
         </p>
       </div>
     </main>
-    <a href="index.html" style="text-align: center; display: block; color: red"
-      >GO TO MAIN</a
-    >
   </body>
 </html>

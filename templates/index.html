@@ -24,13 +24,10 @@
     <!--? blurred bg when show more btn is pressed -->
     <div class="blurred-bg"></div>
     <!--? .......................................... -->
-    <a href="login.html" style="text-align: center; display: block; color: red"
-      >GO TO LOGIN FORM</a
-    >
     <div class="container">
       <header class="header">
         <!-- display username using js when user ir logged in -->
-        <h1 class="greet-user">Hello, {username}</h1>
+        <h1 class="greet-user">Hello, {{ username }} 📖</h1>
         <div class="search-bar">
           <!-- search icon -->
           <svg
@@ -58,7 +55,7 @@
             autocomplete="off"
           />
         </div>
-        <button class="btn-log-out">Log out</button>
+        <button class="btn-log-out"><a href="/logout">Log out</a></button>
       </header>
       <div class="container-main">
         <!-- Making layout, all values will be changed according to API call -->

@@ -25,9 +25,8 @@ def password_validator(pw):
     # At least one uppercase letter
     # At least one lowercase letter
     # At least one digit
-    # At least one of the following symbols (!@#$%&*)
     # Password length 6 or more characters long
-    regex = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%&*])(?=.{6,}).*$"
+    regex = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.{6,}).*$"
 
     match_patter = re.match(regex, pw)
 
@@ -48,7 +47,10 @@ def login_required(f):
 def index():
     userID = session["user_id"]
 
-    return render_template('/index.html')
+    user = db.execute("SELECT username FROM users WHERE id = ?", userID)
+    username = user[0]["username"]
+
+    return render_template('/index.html', username=username.capitalize())
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -62,31 +64,39 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        if not username:
-            flash("provide username")
-            return redirect('/login')
+        if not username or username == '':
+            error_text = 'Must provide username'
+            return render_template('login.html', fail_username=error_text)
 
         elif not password:
-            flash("provide a password")
-            return redirect('/login')
+            error_text = "Must Provide password"
+            return render_template("login.html", fail_password=error_text)
 
         # query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
 
         if len(rows) != 1 or not check_password_hash(rows[0]["hashed"], password):
-            flash("INVALID USERNAME and/or PASSWORD")
-            return redirect('/login')
+            user_not_found = "Invalid username and/or password"
+            return render_template('login.html', no_user=user_not_found)
 
         session["user_id"] = rows[0]["id"]
 
         return redirect("/")
 
 
+@app.route("/logout")
+def logout():
+    # empty sessions user_id
+    session.clear()
+    # redirect user to login form
+    return redirect("/login")
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
         return render_template("register.html")
-    elif request.moethod == "POST":
+    else:
         username = request.form.get("username")
         password = request.form.get("password")
         confirm_pw = request.form.get("confirm-password")
@@ -94,26 +104,26 @@ def register():
         if password_validator(password):
             hashed_password = generate_password_hash(password)
         else:
-            flash("Password needs to contain at least one uppercase letter, one lowercase letter, one digit and following symbols (!@#$%&*)")
-            return redirect("/register")
+            failed_pw = "Password needs to be not less than 6 characters long, contain at least one uppercase letter, one lowercase letter, one digit "
+            return render_template("register.html", failed_pw=failed_pw)
 
         db_username = db.execute(
             "SELECT username FROM users WHERE username = ?", username)
 
         if username is None or username == '':
-            flash("Username is required")
-            return redirect("/register")
+            username_required = "Username is required"
+            return render_template("register.html", username_required=username_required)
 
         if password is None or password == '':
-            flash("Must provide password")
-            return redirect("/register")
+            pw_required = "Must provide password"
+            return render_template("register.html", pw_required=pw_required)
 
         if password != confirm_pw:
-            flash("Password doesn't match")
-            return redirect("/register")
+            pw_match = "Password doesn't match"
+            return render_template("register.html", pw_match=pw_match)
         elif len(db_username) == 1:
-            flash("User already exists")
-            return redirect("/register")
+            user_exists = "User already exists"
+            return render_template("register.html", user_exists=user_exists)
 
         # if above doesn't run, insert new user
         db.execute(
@@ -122,6 +132,5 @@ def register():
             "SELECT * FROM users WHERE username = ?", username)
 
         session["user_id"] = rows[0]["id"]
-        flash("User registered successfully")
 
         return redirect("/")

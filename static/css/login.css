@@ -51,6 +51,11 @@
 .login-form input {
   margin-bottom: 1.2rem;
 }
+
+.login-form small {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
 .login {
   margin-bottom: 0.5rem;
 }

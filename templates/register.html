@@ -31,6 +31,7 @@
               autocomplete="off"
               class="login-input register-username"
             />
+            <small>{{username_required}}</small>
             <label for="password" class="login">Password</label>
             <input
               type="password"
@@ -39,6 +40,7 @@
               placeholder="Enter Password"
               required
             />
+            <small>{{ pw_required }}</small>
             <label for="confirm-password" class="login">Confirm password</label>
             <input
               type="password"
@@ -47,6 +49,9 @@
               placeholder="Confirm password"
               required
             />
+            <small>{{ pw_match }}</small>
+            <small>{{ failed_pw }}</small>
+            <small>{{ user_exists }}</small>
             <button type="submit" class="btn-user register-btn">Register</button>
           </div>
         </form>
@@ -55,6 +60,5 @@
         </p>
       </div>
     </main>
-    <a href="index.html" style="text-align: center; display: block; color: red">GO TO MAIN</a>
   </body>
 </html>
