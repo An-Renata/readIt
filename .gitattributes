@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+node_modules
+readit.db
+.vscode
+.venv
+__pycache__
