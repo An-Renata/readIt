@@ -1,8 +1,5 @@
 "use strict";
 
-// initiate currently reading list as empty array
-let currReading = [];
-
 const renderCurrentlyReading = function (book, container) {
   const html = `
    <section class="currently-reading">
@@ -31,4 +28,17 @@ const renderCurrentlyReading = function (book, container) {
   container.insertAdjacentHTML("beforeend", html);
 };
 
-export { currReading, renderCurrentlyReading };
+const sendCurrentlyReading = async function (bookInfo) {
+  const res = await fetch("/currently-reading", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(bookInfo),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to sed currently reading book info to the server");
+  }
+};
+export { renderCurrentlyReading, sendCurrentlyReading };

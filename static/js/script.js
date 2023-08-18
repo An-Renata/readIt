@@ -1,7 +1,7 @@
 "use strict";
 
 import { renderMoreInfo, getBook } from "./api.js";
-import { currReading, renderCurrentlyReading } from "./helpers.js";
+import { renderCurrentlyReading, sendCurrentlyReading } from "./helpers.js";
 import { renderShowMoreInfo, renderSearchResults } from "./markup.js";
 
 // variable to get user search input value and render windown
@@ -87,14 +87,19 @@ document.addEventListener("click", async (e) => {
   }
 
   if (btnCurrentlyReading) {
-    defaultCurrentlyReading.innerHTML = "";
+    // empty default inner html is there is no books added
+    // defaultCurrentlyReading.innerHTML = "";
+
     try {
       const key = btnCurrentlyReading.dataset.bookKey;
-
+      // receive data needed for currently reading book database
       const bookData = await renderMoreInfo(key);
-      renderCurrentlyReading(bookData, currReadingContainer);
 
-      currReading.push(bookData);
+      // sending data about current book to the server
+      await sendCurrentlyReading(bookData);
+      // render currently reading data to the UI
+
+      renderCurrentlyReading(bookData, currReadingContainer);
     } catch (err) {
       console.log("Error occured", err);
     }

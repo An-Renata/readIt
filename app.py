@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, session, flash
+from flask import Flask, redirect, render_template, request, session, flash, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from cs50 import SQL
@@ -32,6 +32,8 @@ def password_validator(pw):
 
     return bool(match_patter)
 
+# require login decorator to deny access for user who are not logged in
+
 
 def login_required(f):
     @wraps(f)
@@ -46,11 +48,14 @@ def login_required(f):
 @login_required
 def index():
     userID = session["user_id"]
-
+    # get the current user_id username to display in the UI once the user is logged in
     user = db.execute("SELECT username FROM users WHERE id = ?", userID)
     username = user[0]["username"]
 
-    return render_template('/index.html', username=username.capitalize())
+    curr_reading = db.execute(
+        "SELECT * FROM currently_reading WHERE user_id = ?", userID)
+
+    return render_template('/index.html', username=username.capitalize(), curr_reading=curr_reading)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -134,3 +139,22 @@ def register():
         session["user_id"] = rows[0]["id"]
 
         return redirect("/")
+
+# add information about book user is currently reading
+
+
+@app.route('/currently-reading', methods=["POST"])
+def update_curr_reading():
+    userID = session["user_id"]
+
+    book_data = request.json
+
+    # query table with user_id and book title
+    book_row = db.execute(
+        "SELECT * FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
+
+    if len(book_row) != 1:
+        db.execute("INSERT INTO currently_reading (user_id, title, author, book_cover) VALUES (?, ?, ?, ?)",
+                   userID, book_data["title"], book_data["author"], book_data["book_cover"])
+
+    return redirect("/")
