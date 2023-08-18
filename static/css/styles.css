@@ -96,6 +96,9 @@ body {
   padding: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+.hidden {
+  display: none;
+}
 .currently-reading {
   border-radius: var(--border-radius-box) var(--border-radius-box) 0 0;
   overflow: hidden;

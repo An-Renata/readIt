@@ -87,9 +87,6 @@ document.addEventListener("click", async (e) => {
   }
 
   if (btnCurrentlyReading) {
-    // empty default inner html is there is no books added
-    // defaultCurrentlyReading.innerHTML = "";
-
     try {
       const key = btnCurrentlyReading.dataset.bookKey;
       // receive data needed for currently reading book database
@@ -103,5 +100,11 @@ document.addEventListener("click", async (e) => {
     } catch (err) {
       console.log("Error occured", err);
     }
+  }
+  const currReading = document.querySelector(".currently-reading");
+  // if there is
+  if (currReading) {
+    // empty default inner html is there are books added
+    defaultCurrentlyReading.innerHTML = "";
   }
 });

@@ -55,6 +55,7 @@ def index():
     curr_reading = db.execute(
         "SELECT * FROM currently_reading WHERE user_id = ?", userID)
 
+
     return render_template('/index.html', username=username.capitalize(), curr_reading=curr_reading)
 
 
@@ -148,13 +149,14 @@ def update_curr_reading():
     userID = session["user_id"]
 
     book_data = request.json
-
+    print(book_data["author"])
     # query table with user_id and book title
     book_row = db.execute(
         "SELECT * FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
 
     if len(book_row) != 1:
+        authors = ", ".join(book_data["author"])
         db.execute("INSERT INTO currently_reading (user_id, title, author, book_cover) VALUES (?, ?, ?, ?)",
-                   userID, book_data["title"], book_data["author"], book_data["book_cover"])
+                   userID, book_data["title"], authors, book_data["book_cover"])
 
     return redirect("/")
