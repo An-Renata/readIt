@@ -16,7 +16,6 @@ const getBook = async (search) => {
       throw new Error(`Request failed with status: ${res.status}`);
     }
     const data = await res.json();
-
     if (data.length === 0) {
       return "No book found";
     }
@@ -33,7 +32,7 @@ const getBook = async (search) => {
           description: book.synopsis ?? "No info",
           title: book.title,
           language: book.language ?? "No info",
-          key: book.isbn13 ?? book.isbn ?? book.isbn10,
+          key: book.isbn ?? book.isbn13 ?? book.isbn10,
         };
 
         return bookData;
@@ -63,6 +62,7 @@ const renderMoreInfo = async function (key) {
     language: data.book.language ?? "No info",
     subject: data.book.subjects?.slice(0, 3).join(", ") ?? "No info",
     description: data.book.synopsis ?? "Description not available",
+    book_key: data.book.isbn ?? data.book.isbn13,
   };
   return moreInfo;
 };

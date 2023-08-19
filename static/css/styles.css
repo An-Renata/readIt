@@ -104,6 +104,9 @@ body {
   overflow: hidden;
   transition: all 0.3s ease-in;
 }
+.remove {
+  display: none;
+}
 .book-info {
   display: flex;
   flex-direction: column;
@@ -156,6 +159,9 @@ body {
   cursor: pointer;
   border-radius: var(--border-radius-btn);
   border: none;
+  text-align: center;
+  text-decoration: none;
+  color: var(--main-font-color);
   font-size: 1.3rem;
   border: 1px solid var(--bright-yellow-color);
   letter-spacing: 1.2px;
@@ -261,7 +267,6 @@ body {
 .add-currently-reading:hover {
   background-color: #ece5e2;
 }
-
 /* ASIDE BOX */
 .aside-box {
   height: 30rem;

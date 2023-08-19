@@ -59,28 +59,36 @@
       </header>
       <div class="container-main">
         <!-- Making layout, all values will be changed according to API call -->
-        <div>
+        <div class="currently-reading-box">
           <h2 class="currently-reading-heading">currently reading</h2>
           {% if curr_reading %} {% for book in curr_reading %}
-          <section class="currently-reading">
-            <div class="img-box">
-              <img
-                class="book-cover-img"
-                src="{{ book['book_cover'] }}"
-                alt="book cover photo"
-              />
-            </div>
-            <div class="book-info">
-              <h3 class="book-title">{{ book["title"] }}</h3>
-              <p class="book-author">{{ book["author"] }}</p>
-              <button class="btn btn-curr-box btn-finished transition">
-                Finished!
-              </button>
-              <button class="btn btn-curr-box btn-cancel transition">
-                Cancel reading
-              </button>
-            </div>
-          </section>
+          <div class="currently-reading-container"
+            <section class="currently-reading" data-book-key="{{ book['book_key'] }}">
+              <div class="img-box">
+                <img
+                  class="book-cover-img"
+                  src="{{ book['book_cover'] }}"
+                  alt="book cover photo"
+                />
+              </div>
+              <div class="book-info">
+                <h3 class="book-title">{{ book["title"] }}</h3>
+                <p class="book-author">{{ book["author"] }}</p>
+                <button
+                  class="btn btn-curr-box btn-finished transition"
+                  data-book-key="{{ book['book_key'] }}"
+                >
+                  Finished!
+                </button>
+                <button
+                  class="btn btn-curr-box btn-cancel transition"
+                  data-book-key="{{ book['book_key'] }}"
+                >
+                  Cancel reading
+                </button>
+              </div>
+            </section>
+          </div>
           {% endfor %} {% else %}
           <div class="currently-reading-container">
             <div class="default-currently-reading">

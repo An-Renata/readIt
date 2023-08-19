@@ -1,7 +1,11 @@
 "use strict";
 
 import { renderMoreInfo, getBook } from "./api.js";
-import { renderCurrentlyReading, sendCurrentlyReading } from "./helpers.js";
+import {
+  renderCurrentlyReading,
+  sendCurrentlyReading,
+  sendFinishedBook,
+} from "./helpers.js";
 import { renderShowMoreInfo, renderSearchResults } from "./markup.js";
 
 // variable to get user search input value and render windown
@@ -14,6 +18,8 @@ const currReadingContainer = document.querySelector(
 const defaultCurrentlyReading = document.querySelector(
   ".default-currently-reading"
 );
+const btnFinished = document.querySelector(".btn-finished");
+
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
   if (e.key === "Enter" && searchBar.value !== "") {
@@ -91,20 +97,45 @@ document.addEventListener("click", async (e) => {
       const key = btnCurrentlyReading.dataset.bookKey;
       // receive data needed for currently reading book database
       const bookData = await renderMoreInfo(key);
-
       // sending data about current book to the server
       await sendCurrentlyReading(bookData);
       // render currently reading data to the UI
 
       renderCurrentlyReading(bookData, currReadingContainer);
+      btnCurrentlyReading.innerHTML = "Added";
     } catch (err) {
       console.log("Error occured", err);
     }
   }
   const currReading = document.querySelector(".currently-reading");
-  // if there is
+
   if (currReading) {
-    // empty default inner html is there are books added
     defaultCurrentlyReading.innerHTML = "";
+  } else {
+    return;
+  }
+});
+
+// send data when user clicks finish book button
+document.addEventListener("click", async (e) => {
+  if (!btnFinished) {
+    return;
+  }
+  try {
+    // getting the key of the currently reading book box
+    const key = btnFinished.dataset.bookKey;
+    const currReading = document.querySelector(".currently_reading");
+    // retrieving data about book
+    const bookData = await renderMoreInfo(key);
+    // sending information to the server
+    await sendFinishedBook(bookData);
+
+    console.log(currReading.dataset.bookKey);
+    console.log(key);
+    if (currReading.dataset.bookKey == key) {
+      currReading.innerHTML = "";
+    }
+  } catch (err) {
+    console.log(err);
   }
 });
