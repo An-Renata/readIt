@@ -1,58 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login | readit</title>
-    <link rel="stylesheet" href="../static/css/styles.css" />
-    <link rel="stylesheet" href="../static/css/login.css" />
-  </head>
-  <body>
-    <video
-      src="../static/img/login-reading.mp4"
-      type="video/mp4"
-      autoplay
-      muted
-      loop
-      id="video-login"
-    ></video>
-    <main>
-      <h1 class="greet">
-        Welcome to read<span class="name-end">it</span> <br /><span
-          >Track your reading with us</span
-        >
-      </h1>
-      <div class="login-container">
-        <h2>Login</h2>
-        <form action="/login" method="post">
-          <div class="login-form">
-            <label for="username" class="login">Username</label>
-            <input
-              type="text"
-              placeholder="Enter Username"
-              name="username"
-              autocomplete="off"
-              class="login-input login-username"
-            />
+{% extends "layout.html" %} {% block main %}
+<video
+  src="../static/img/login-reading.mp4"
+  type="video/mp4"
+  autoplay
+  muted
+  loop
+  id="video-login"
+></video>
+<main>
+  <h1 class="greet">
+    Welcome to read<span class="name-end">it</span> <br /><span
+      >Track your reading with us</span
+    >
+  </h1>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form action="/login" method="post">
+      <div class="login-form">
+        <label for="username" class="login">Username</label>
+        <input
+          type="text"
+          placeholder="Enter Username"
+          name="username"
+          autocomplete="off"
+          class="login-input login-username"
+        />
 
-            <small>{{ fail_username }}</small>
-            <label for="password" class="login">Password</label>
-            <input
-              type="password"
-              name="password"
-              class="login-input login-password"
-              placeholder="Enter Password"
-            />
+        <small>{{ fail_username }}</small>
+        <label for="password" class="login">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="login-input login-password"
+          placeholder="Enter Password"
+        />
 
-            <small>{{ fail_password }}</small>
-            <small>{{ no_user }}</small>
-            <button type="submit" class="btn-user login-btn">Login</button>
-          </div>
-        </form>
-        <p class="sign-up-link">
-          Not a member? <span><a href="/register">Signup now</a></span>
-        </p>
+        <small>{{ fail_password }}</small>
+        <small>{{ no_user }}</small>
+        <button type="submit" class="btn-user login-btn">Login</button>
       </div>
-    </main>
-  </body>
-</html>
+    </form>
+    <p class="sign-up-link">
+      Not a member? <span><a href="/register">Signup now</a></span>
+    </p>
+  </div>
+</main>
+{% endblock %}

@@ -3,6 +3,7 @@
 import { renderMoreInfo, getBook } from "./api.js";
 import {
   renderCurrentlyReading,
+  renderDefaultCurrentlyReading,
   sendCurrentlyReading,
   sendFinishedBook,
 } from "./helpers.js";
@@ -18,7 +19,6 @@ const currReadingContainer = document.querySelector(
 const defaultCurrentlyReading = document.querySelector(
   ".default-currently-reading"
 );
-const btnFinished = document.querySelector(".btn-finished");
 
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
@@ -112,28 +112,35 @@ document.addEventListener("click", async (e) => {
   if (currReading) {
     defaultCurrentlyReading.innerHTML = "";
   } else {
-    return;
+    // !.............................
+    renderDefaultCurrentlyReading();
   }
 });
 
 // send data when user clicks finish book button
 document.addEventListener("click", async (e) => {
+  const btnFinished = e.target.closest(".btn-finished");
   if (!btnFinished) {
     return;
   }
   try {
     // getting the key of the currently reading book box
     const key = btnFinished.dataset.bookKey;
-    const currReading = document.querySelector(".currently_reading");
+
+    const currReading = document.querySelector(".currently-reading");
+    const currReadingKey = currReading.dataset.bookKey;
     // retrieving data about book
     const bookData = await renderMoreInfo(key);
     // sending information to the server
     await sendFinishedBook(bookData);
 
-    console.log(currReading.dataset.bookKey);
-    console.log(key);
-    if (currReading.dataset.bookKey == key) {
+    // ! .......................
+    if (currReadingKey === key) {
       currReading.innerHTML = "";
+    }
+    // ! ..........................
+    if (!currReading) {
+      renderDefaultCurrentlyReading();
     }
   } catch (err) {
     console.log(err);

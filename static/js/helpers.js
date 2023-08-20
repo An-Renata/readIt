@@ -37,6 +37,19 @@ const renderCurrentlyReading = function (book, container) {
   container.insertAdjacentHTML("beforeend", html);
 };
 
+const renderDefaultCurrentlyReading = function () {
+  return ` <div class="currently-reading-container">
+            <div class="default-currently-reading">
+              <img
+                src="../static/img/currently-reading.svg"
+                alt="reading girl icon"
+                width="100"
+              />
+              <p>Add books you are currently reading</p>
+            </div>
+          </div>`;
+};
+
 const sendCurrentlyReading = async function (bookInfo) {
   const res = await fetch("/currently-reading", ajaxHeader(bookInfo));
 
@@ -52,4 +65,9 @@ const sendFinishedBook = async function (bookInfo) {
     throw new Error("Failed to send Finished book");
   }
 };
-export { renderCurrentlyReading, sendCurrentlyReading, sendFinishedBook };
+export {
+  renderCurrentlyReading,
+  renderDefaultCurrentlyReading,
+  sendCurrentlyReading,
+  sendFinishedBook,
+};

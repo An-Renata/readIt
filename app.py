@@ -167,5 +167,17 @@ def update_curr_reading():
 def update_finished():
     userID = session["user_id"]
     book_data = request.json
+    
     print(book_data)
+
+    book_row = db.execute("SELECT * FROM currently_reading WHERE user_id = ? AND book_key = ?", userID, book_data["book_key"])
+
+    print(book_row)
+
+    if len(book_row) == 1:
+        # insert into bookshelf if book is finished
+        db.execute("INSERT INTO read (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)", userID, book_data["title"], book_data["author"], book_data["book_cover"], book_data["book_key"])
+        # Delete book from currently reading list
+        db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
+
     return redirect("/")
