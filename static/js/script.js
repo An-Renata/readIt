@@ -99,12 +99,20 @@ document.addEventListener("click", async (e) => {
       const bookData = await renderMoreInfo(key);
       // sending data about current book to the server
       await sendCurrentlyReading(bookData);
-      // render currently reading data to the UI
 
-      renderCurrentlyReading(bookData, currReadingContainer);
+      // fetching data from the flask side
+      const getBook = await fetch("reading");
+      const book = await getBook.json();
+      // take the last added book
+      const lastAdded = book.slice(-1);
+      // render result on the screen
+      lastAdded.map((el) => {
+        renderCurrentlyReading(el, currReadingContainer);
+      });
+
       btnCurrentlyReading.innerHTML = "Added";
     } catch (err) {
-      console.log("Error occured", err);
+      console.log("Error occured in script.js", err);
     }
   }
   const currReading = document.querySelector(".currently-reading");
@@ -128,20 +136,19 @@ document.addEventListener("click", async (e) => {
     const key = btnFinished.dataset.bookKey;
 
     const currReading = document.querySelector(".currently-reading");
-    const currReadingKey = currReading.dataset.bookKey;
     // retrieving data about book
     const bookData = await renderMoreInfo(key);
     // sending information to the server
     await sendFinishedBook(bookData);
 
-    // ! .......................
-    if (currReadingKey === key) {
-      currReading.innerHTML = "";
-    }
-    // ! ..........................
-    if (!currReading) {
-      renderDefaultCurrentlyReading();
-    }
+    // // ! .......................
+    // if (-----) {
+    //   currReading.innerHTML = "";
+    // }
+    // // ! ..........................
+    // if (!currReading) {
+    //   renderDefaultCurrentlyReading();
+    // }
   } catch (err) {
     console.log(err);
   }

@@ -1,5 +1,5 @@
 "use strict";
-const API_KEY = "50299_e67df3556f3eeab2c46a8ddb59daaadd";
+import { API_KEY } from "./key.js";
 
 let headers = {
   "Content-Type": "application/json",
@@ -52,7 +52,6 @@ const renderMoreInfo = async function (key) {
     headers: headers,
   });
   const data = await response.json();
-
   // put related info to an object
   const moreInfo = {
     title: data.book.title,

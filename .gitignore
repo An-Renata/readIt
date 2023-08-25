@@ -3,3 +3,4 @@ readit.db
 .vscode
 .venv
 __pycache__
+.key.js

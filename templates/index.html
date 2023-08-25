@@ -1,120 +1,117 @@
-{% extends "layout.html" %}
-
-{% block main %}
-    <!--? blurred bg when show more btn is pressed -->
-    <div class="blurred-bg"></div>
-    <!--? .......................................... -->
-    <div class="container">
-      <header class="header">
-        <!-- display username using js when user ir logged in -->
-        <h1 class="greet-user">Hello, {{ username }} 📖</h1>
-        <div class="search-bar">
-          <!-- search icon -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-            style="width: 20px; margin-left: 5px; margin-right: 2px"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-            />
-          </svg>
-          <!-- search bar -->
-          <input
-            type="text"
-            name="search"
-            id="search-book"
-            placeholder="Search..."
-            size="95"
-            autocomplete="off"
-          />
-        </div>
-        <button class="btn-log-out"><a href="/logout">Log out</a></button>
-      </header>
-      <div class="container-main">
-        <!-- Making layout, all values will be changed according to API call -->
-        <div class="currently-reading-box">
-          <h2 class="currently-reading-heading">currently reading</h2>
-          {% if curr_reading %} {% for book in curr_reading %}
-          <!-- <div class="currently-reading-container" -->
-          <section
-            class="currently-reading"
-            data-book-key='{{ book["book_key"] }}'
-          >
-            <div class="img-box">
-              <img
-                class="book-cover-img"
-                src="{{ book['book_cover'] }}"
-                alt="book cover photo"
-              />
-            </div>
-            <div class="book-info">
-              <h3 class="book-title">{{ book["title"] }}</h3>
-              <p class="book-author">{{ book["author"] }}</p>
-              <button
-                class="btn btn-curr-box btn-finished transition"
-                data-book-key='{{ book["book_key"] }}'
-              >
-                Finished!
-              </button>
-              <button
-                class="btn btn-curr-box btn-cancel transition"
-                data-book-key='{{ book["book_key"] }}'
-              >
-                Cancel reading
-              </button>
-            </div>
-          </section>
-          <!-- </div> -->
-          {% endfor %} {% else %}
-          <div class="currently-reading-container">
-            <div class="default-currently-reading">
-              <img
-                src="../static/img/currently-reading.svg"
-                alt="reading girl icon"
-                width="100"
-              />
-              <p>Add books you are currently reading</p>
-            </div>
-          </div>
-          {% endif %}
-        </div>
-        <main>
-          <div class="render-book-window">
-            <span class="spinner"></span>
-            <ul>
-              <!-- INPUT FROM JS SEARCH RESULTS -->
-            </ul>
-          </div>
-          <div class="read-more-box">
-            <!-- RENDER SHOW MORE -->
-          </div>
-        </main>
-        <aside class="aside-box">
-          <a href="/bookshelf">
-            <button class="btn-read transition">
-              <img src="../static/img/read-100.png" alt="book icon" />
-              <p>Bookshelf</p>
-            </button>
-          </a>
-          <a href="/to-read">
-            <button class="btn-want-to-read transition">
-              <img
-                src="../static/img/want-to-read-100.png"
-                alt="open book"
-                srcset=""
-              />
-              <p>Want to read</p>
-            </button>
-          </a>
-        </aside>
-      </div>
+{% extends "layout.html" %} {% block main %}
+<!--? blurred bg when show more btn is pressed -->
+<div class="blurred-bg"></div>
+<!--? .......................................... -->
+<div class="container">
+  <header class="header">
+    <!-- display username using js when user ir logged in -->
+    <h1 class="greet-user">Hello, {{ username }} 📖</h1>
+    <div class="search-bar">
+      <!-- search icon -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+        style="width: 20px; margin-left: 5px; margin-right: 2px"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+        />
+      </svg>
+      <!-- search bar -->
+      <input
+        type="text"
+        name="search"
+        id="search-book"
+        placeholder="Search..."
+        size="95"
+        autocomplete="off"
+      />
     </div>
-  </body>
+    <button class="btn-log-out"><a href="/logout">Log out</a></button>
+  </header>
+  <div class="container-main">
+    <!-- Making layout, all values will be changed according to API call -->
+    <div class="currently-reading-box">
+      <h2 class="currently-reading-heading">currently reading</h2>
+      {% if curr_reading %} {% for book in curr_reading %}
+      <div class="currently-reading-container">
+        <section
+          class="currently-reading"
+          data-book-key='{{ book["book_key"] }}'
+        >
+          <div class="img-box">
+            <img
+              class="book-cover-img"
+              src="{{ book['book_cover'] }}"
+              alt="book cover photo"
+            />
+          </div>
+          <div class="book-info">
+            <h3 class="book-title">{{ book["title"] }}</h3>
+            <p class="book-author">{{ book["author"] }}</p>
+            <button
+              class="btn btn-curr-box btn-finished transition"
+              data-book-key='{{ book["book_key"] }}'
+            >
+              Finished!
+            </button>
+            <button
+              class="btn btn-curr-box btn-cancel transition"
+              data-book-key='{{ book["book_key"] }}'
+            >
+              Cancel reading
+            </button>
+          </div>
+        </section>
+      </div>
+      {% endfor %} {% else %}
+      <div class="currently-reading-container">
+        <div class="default-currently-reading">
+          <img
+            src="../static/img/currently-reading.svg"
+            alt="reading girl icon"
+            width="100"
+          />
+          <p>Add books you are currently reading</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    <main>
+      <div class="render-book-window">
+        <span class="spinner"></span>
+        <ul>
+          <!-- INPUT FROM JS SEARCH RESULTS -->
+        </ul>
+      </div>
+      <div class="read-more-box">
+        <!-- RENDER SHOW MORE -->
+      </div>
+    </main>
+    <aside class="aside-box">
+      <a href="/bookshelf">
+        <button class="btn-read transition">
+          <img src="../static/img/read-100.png" alt="book icon" />
+          <p>Bookshelf</p>
+        </button>
+      </a>
+      <a href="/to-read">
+        <button class="btn-want-to-read transition">
+          <img
+            src="../static/img/want-to-read-100.png"
+            alt="open book"
+            srcset=""
+          />
+          <p>Want to read</p>
+        </button>
+      </a>
+    </aside>
+  </div>
+</div>
 {% endblock %}

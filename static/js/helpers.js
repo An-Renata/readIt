@@ -1,4 +1,5 @@
 "use strict";
+
 const ajaxHeader = (bookInfo) => {
   return {
     method: "POST",
@@ -56,6 +57,8 @@ const sendCurrentlyReading = async function (bookInfo) {
   if (!res.ok) {
     throw new Error("Failed to send currently reading book info to the server");
   }
+
+  return res;
 };
 
 const sendFinishedBook = async function (bookInfo) {
@@ -64,6 +67,8 @@ const sendFinishedBook = async function (bookInfo) {
   if (!res.ok) {
     throw new Error("Failed to send Finished book");
   }
+
+  return res;
 };
 export {
   renderCurrentlyReading,

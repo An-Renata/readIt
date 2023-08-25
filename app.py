@@ -54,7 +54,7 @@ def index():
 
     curr_reading = db.execute(
         "SELECT * FROM currently_reading WHERE user_id = ?", userID)
-
+    curr_reading=curr_reading
 
     return render_template('/index.html', username=username.capitalize(), curr_reading=curr_reading)
 
@@ -147,7 +147,7 @@ def update_curr_reading():
     userID = session["user_id"]
     # get data about the book from ajax call JS side
     book_data = request.json
-   
+
     # query table with user_id and book title
     book_row = db.execute(
         "SELECT * FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
@@ -156,7 +156,7 @@ def update_curr_reading():
     if len(book_row) != 1:
         authors = ", ".join(book_data["author"])
         db.execute("INSERT INTO currently_reading (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)",
-                   userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"])
+                userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"])
     # if book already exists, and receives the same info, it means user want to delete it from the list
     else:
         db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
@@ -168,11 +168,11 @@ def update_finished():
     userID = session["user_id"]
     book_data = request.json
     
-    print(book_data)
+    # print(book_data)
 
     book_row = db.execute("SELECT * FROM currently_reading WHERE user_id = ? AND book_key = ?", userID, book_data["book_key"])
 
-    print(book_row)
+    # print(book_row)
 
     if len(book_row) == 1:
         # insert into bookshelf if book is finished
@@ -180,4 +180,17 @@ def update_finished():
         # Delete book from currently reading list
         db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
 
+
     return redirect("/")
+
+# sen json data from the server to js
+@app.route('/reading')
+def reading():
+    curr_reading = db.execute("SELECT * FROM currently_reading WHERE user_id = ?", session["user_id"])
+    # for debugging
+    print(curr_reading)
+
+    return jsonify(curr_reading)
+
+
+
