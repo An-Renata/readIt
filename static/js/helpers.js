@@ -39,15 +39,13 @@ const renderCurrentlyReading = function (book, container) {
 };
 
 const renderDefaultCurrentlyReading = function () {
-  return ` <div class="currently-reading-container">
-            <div class="default-currently-reading">
-              <img
-                src="../static/img/currently-reading.svg"
-                alt="reading girl icon"
-                width="100"
-              />
-              <p>Add books you are currently reading</p>
-            </div>
+  return `<div class="default-currently-reading">
+            <img
+              src="../static/img/currently-reading.svg"
+              alt="reading girl icon"
+              width="100"
+            />
+            <p>Add books you are currently reading</p>
           </div>`;
 };
 

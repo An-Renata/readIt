@@ -20,7 +20,6 @@ Session(app)
 # connect sqlite database to application
 db = SQL("sqlite:///readit.db")
 
-
 def password_validator(pw):
     # At least one uppercase letter
     # At least one lowercase letter
@@ -175,13 +174,13 @@ def update_finished():
     # print(book_row)
 
     if len(book_row) == 1:
+        authors = ", ".join(book_data["author"])
         # insert into bookshelf if book is finished
-        db.execute("INSERT INTO read (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)", userID, book_data["title"], book_data["author"], book_data["book_cover"], book_data["book_key"])
+        db.execute("INSERT INTO read (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)", userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"])
         # Delete book from currently reading list
         db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
 
-
-    return redirect("/")
+    return redirect('/')
 
 # sen json data from the server to js
 @app.route('/reading')

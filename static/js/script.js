@@ -119,36 +119,38 @@ document.addEventListener("click", async (e) => {
 
   if (currReading) {
     defaultCurrentlyReading.innerHTML = "";
-  } else {
-    // !.............................
-    renderDefaultCurrentlyReading();
   }
 });
 
 // send data when user clicks finish book button
 document.addEventListener("click", async (e) => {
   const btnFinished = e.target.closest(".btn-finished");
+  const currReading = document.querySelector(".currently-reading");
+
   if (!btnFinished) {
     return;
   }
+
   try {
     // getting the key of the currently reading book box
     const key = btnFinished.dataset.bookKey;
-
-    const currReading = document.querySelector(".currently-reading");
     // retrieving data about book
     const bookData = await renderMoreInfo(key);
     // sending information to the server
     await sendFinishedBook(bookData);
 
-    // // ! .......................
-    // if (-----) {
-    //   currReading.innerHTML = "";
-    // }
-    // // ! ..........................
-    // if (!currReading) {
-    //   renderDefaultCurrentlyReading();
-    // }
+    // remove currently reading book from the list
+    if (currReading && currReading.dataset.bookKey === key) {
+      currReadingContainer.removeChild(currReading);
+    }
+
+    // trim the whitespace, otherwise it still have some html left
+    if (
+      !currReadingContainer.textContent.trim() &&
+      currReadingContainer.children.length === 0
+    ) {
+      currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
+    }
   } catch (err) {
     console.log(err);
   }
