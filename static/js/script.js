@@ -87,39 +87,54 @@ document.addEventListener("click", async (e) => {
     showMore = false;
   }
 });
+//* CURRENTLY READING BOX
+// RENDER CURRENTLY READING IF THERE IS ANY AS USER LOGGED IN
+const renderReadings = async function () {
+  const res = await fetch("/currently-reading");
+  const currentlyReading = await res.json();
+  console.log(currentlyReading);
+
+  if (currentlyReading.length > 0) {
+    // remove default currently reading
+    currReadingContainer.innerHTML = "";
+
+    currentlyReading.forEach((el) => {
+      renderCurrentlyReading(el, currReadingContainer);
+    });
+  }
+};
+renderReadings();
 
 // listen for a click on the "currently-reading" button after user searches
 document.addEventListener("click", async (e) => {
   // target for the btn
   const btnCurrentlyReading = e.target.closest(".add-currently-reading");
 
-  if (!btnCurrentlyReading) {
-    return;
+  if (!btnCurrentlyReading) return;
+
+  // if (btnCurrentlyReading) {
+  try {
+    const key = btnCurrentlyReading.dataset.bookKey;
+    // receive data needed for currently reading book database
+    const bookData = await renderMoreInfo(key);
+    // sending data about current book to the server
+    await sendCurrentlyReading(bookData);
+
+    // fetching data from the flask side about currently reading books
+    const getBook = await fetch("reading");
+    const book = await getBook.json();
+    // take the last added book
+    const lastAdded = book.slice(-1);
+    // render result on the screen
+    lastAdded.map((el) => {
+      renderCurrentlyReading(el, currReadingContainer);
+    });
+
+    btnCurrentlyReading.innerHTML = "Added";
+  } catch (err) {
+    console.log("Error occured in script.js", err);
   }
-
-  if (btnCurrentlyReading) {
-    try {
-      const key = btnCurrentlyReading.dataset.bookKey;
-      // receive data needed for currently reading book database
-      const bookData = await renderMoreInfo(key);
-      // sending data about current book to the server
-      await sendCurrentlyReading(bookData);
-
-      // fetching data from the flask side
-      const getBook = await fetch("reading");
-      const book = await getBook.json();
-      // take the last added book
-      const lastAdded = book.slice(-1);
-      // render result on the screen
-      lastAdded.map((el) => {
-        renderCurrentlyReading(el, currReadingContainer);
-      });
-
-      btnCurrentlyReading.innerHTML = "Added";
-    } catch (err) {
-      console.log("Error occured in script.js", err);
-    }
-  }
+  // }
   const currReading = document.querySelector(".currently-reading");
 
   if (currReading) {
@@ -127,50 +142,43 @@ document.addEventListener("click", async (e) => {
   }
 });
 
-// send data when user clicks finish book button
+// Send data to the bookshelf when user clicks finish book button on the currently reading box
 document.addEventListener("click", async (e) => {
   const btnFinished = e.target.closest(".btn-finished");
   const currReading = document.querySelector(".currently-reading");
 
-  if (!btnFinished) {
-    return;
+  if (!btnFinished) return;
+  // getting the key of the currently reading book box
+  const key = btnFinished.dataset.bookKey;
+  const bookData = await renderMoreInfo(key);
+  // retrieving data about book
+  console.log("KEY", key);
+  // sending information to the server
+  await sendFinishedBook(bookData);
+  // remove currently reading book from the list
+  if (currReading && currReading.dataset.bookKey === key) {
+    btnFinished.closest(".currently-reading").remove();
   }
-
-  try {
-    // getting the key of the currently reading book box
-    const key = btnFinished.dataset.bookKey;
-    // retrieving data about book
-    const bookData = await renderMoreInfo(key);
-    // sending information to the server
-    await sendFinishedBook(bookData);
-
-    // remove currently reading book from the list
-    if (currReading && currReading.dataset.bookKey === key) {
-      currReadingContainer.removeChild(currReading);
-    }
-
-    // trim the whitespace, otherwise it still have some html left
-    if (
-      !currReadingContainer.textContent.trim() &&
-      currReadingContainer.children.length === 0
-    ) {
-      currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
-    }
-  } catch (err) {
-    console.log(err);
+  // trim the whitespace, otherwise it still have some html left
+  if (
+    !currReadingContainer.textContent.trim() &&
+    currReadingContainer.children.length === 0
+  ) {
+    currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
   }
 });
 
 //* FINISHED BOOKS WINDOW
 // Open window of finished books
 btnRead.addEventListener("click", async function () {
-  const res = await fetch("/finished");
+  // fetch data from the server
+  const res = await fetch("/bookshelf");
   const finishedBooks = await res.json();
-  // renderBooks;
+
+  // delete any previous html
   renderBooks.innerHTML = "";
+
   finishedBooks.forEach((el) => {
-    console.log(el);
-    // delete any previous html
     // get html markup
     const html = renderUserBookList(el);
     // insert data into main window
@@ -178,7 +186,7 @@ btnRead.addEventListener("click", async function () {
   });
 });
 
-// Delete finihed book from the db
+// Delete finished book from the db
 document.addEventListener("click", async function (e) {
   const btnDeleteBookshelf = e.target.closest(".btn-cancel-bookshelf");
 
@@ -187,5 +195,6 @@ document.addEventListener("click", async function (e) {
   const key = btnDeleteBookshelf.dataset.bookKey;
   // send to the server key and from the server delete the book info
   await deleteFinishedBook(key);
+
   btnDeleteBookshelf.closest(".finished").innerHTML = "";
 });

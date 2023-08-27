@@ -141,58 +141,60 @@ def register():
         return redirect("/")
 
 # add information about book user is currently reading
-@app.route('/currently-reading', methods=["POST"])
+@app.route('/currently-reading', methods=["GET", "POST"])
 def update_curr_reading():
     userID = session["user_id"]
-    # get data about the book from ajax call JS side
-    book_data = request.json
+    if request.method == "POST":
+        # get data about the book from ajax call JS side
+        book_data = request.json
 
-    # query table with user_id and book title
-    book_row = db.execute(
-        "SELECT * FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
+        # query table with user_id and book title
+        book_row = db.execute(
+            "SELECT * FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
 
-    # if the book doesn't exist, add it to the database
-    if len(book_row) != 1:
-        authors = ", ".join(book_data["author"])
-        db.execute("INSERT INTO currently_reading (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)",
-                userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"])
-    # if book already exists, and receives the same info, it means user want to delete it from the list
+        # if the book doesn't exist, add it to the database
+        if len(book_row) != 1:
+            authors = ", ".join(book_data["author"])
+            db.execute("INSERT INTO currently_reading (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)",
+                    userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"])
+        # if book already exists, and receives the same info, it means user want to delete it from the list
+        else:
+            db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
+
+        return redirect("/")
     else:
-        db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
+        book = db.execute("SELECT * FROM currently_reading WHERE user_id = ?", userID)
 
-    return redirect("/")
+        return jsonify(book)
 
+# Clicked finish button on the currently reading box, DELETES book from curr_reading and INSERTS to bookshelf(read)
 @app.route("/finished", methods=["POST"])
-def update_finished():
+def delete_currently_reading():
     userID = session["user_id"]
+    # getting data from the JS about finished book
     book_data = request.json
     
-    # print(book_data)
-
     book_row = db.execute("SELECT * FROM currently_reading WHERE user_id = ? AND book_key = ?", userID, book_data["book_key"])
 
-    # print(book_row)
-
-    if len(book_row) == 1:
-        authors = ", ".join(book_data["author"])
-        # insert into bookshelf if book is finished
-        db.execute("INSERT INTO read (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)", userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"])
-        # Delete book from currently reading list
-        db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
+    authors = ", ".join(book_data["author"])
+    # insert into bookshelf if book is finished
+    db.execute("INSERT INTO read (user_id, title, author, book_cover, book_key) VALUES (?, ?, ?, ?, ?)", userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"])
+    # # Delete book from currently reading list
+    db.execute("DELETE FROM currently_reading WHERE user_id = ? AND title = ?", userID, book_data["title"])
 
     return redirect('/')
 
-# sen json data from the server to js
+# send json data from the server to js about currently reading books
 @app.route('/reading')
 def reading():
-    curr_reading = db.execute("SELECT * FROM currently_reading WHERE user_id = ?", session["user_id"])
-    # for debugging
-    print(curr_reading)
+    userID = session["user_id"]
+
+    curr_reading = db.execute("SELECT * FROM currently_reading WHERE user_id = ?", userID)
 
     return jsonify(curr_reading)
 
 # Book data of finished books
-@app.route("/finished")
+@app.route("/bookshelf")
 def finished():
     finish_book = db.execute("SELECT * FROM read WHERE user_id = ?", session["user_id"])
 

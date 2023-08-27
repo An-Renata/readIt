@@ -25,12 +25,12 @@ const renderCurrentlyReading = function (book, container) {
           ${book.title}
         </h3>
         <p class="book-author">${book.author}</p>
-        <a href="/finished" class="btn btn-curr-box btn-finished transition" data-book-key=${book.book_key}>
+        <button class="btn btn-curr-box btn-finished transition" data-book-key=${book.book_key}>
           Finished!
-        </a>
-        <a href="/cancel_reading" class="btn btn-curr-box btn-cancel transition" data-book-key=${book.book_key}>
+        </button>
+        <button class="btn btn-curr-box btn-cancel transition" data-book-key=${book.book_key}>
           Cancel reading
-        </a>
+        </button>
       </div>
     </section>
   `;
@@ -68,7 +68,7 @@ const sendFinishedBook = async function (bookInfo) {
 
   return res;
 };
-
+// delete book from the bookshelf
 const deleteFinishedBook = async function (key) {
   const res = await fetch("/delete-finished", ajaxHeader(key));
 

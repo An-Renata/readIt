@@ -40,7 +40,15 @@
     <div class="currently-reading-box">
       <h2 class="currently-reading-heading">currently reading</h2>
       <div class="currently-reading-container">
-        {% if curr_reading %} {% for book in curr_reading %}
+        <div class="default-currently-reading">
+          <img
+            src="../static/img/currently-reading.svg"
+            alt="reading girl icon"
+            width="100"
+          />
+          <p>Add books you are currently reading</p>
+        </div>
+        <!-- {% if curr_reading %} {% for book in curr_reading %}
         <section
           class="currently-reading"
           data-book-key='{{ book["book_key"] }}'
@@ -78,7 +86,7 @@
           />
           <p>Add books you are currently reading</p>
         </div>
-        {% endif %}
+        {% endif %} -->
       </div>
     </div>
     <main>
