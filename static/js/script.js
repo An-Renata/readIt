@@ -6,11 +6,12 @@ import {
   renderDefaultCurrentlyReading,
   sendCurrentlyReading,
   sendFinishedBook,
+  deleteFinishedBook,
 } from "./helpers.js";
 import {
   renderShowMoreInfo,
   renderSearchResults,
-  renderFinishedBooks,
+  renderUserBookList,
 } from "./markup.js";
 
 // variable to get user search input value and render windown
@@ -24,7 +25,6 @@ const defaultCurrentlyReading = document.querySelector(
   ".default-currently-reading"
 );
 const btnRead = document.querySelector(".btn-read");
-
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
   if (e.key === "Enter" && searchBar.value !== "") {
@@ -161,6 +161,7 @@ document.addEventListener("click", async (e) => {
   }
 });
 
+//* FINISHED BOOKS WINDOW
 // Open window of finished books
 btnRead.addEventListener("click", async function () {
   const res = await fetch("/finished");
@@ -171,8 +172,20 @@ btnRead.addEventListener("click", async function () {
     console.log(el);
     // delete any previous html
     // get html markup
-    const html = renderFinishedBooks(el);
+    const html = renderUserBookList(el);
     // insert data into main window
     renderBooks.insertAdjacentHTML("beforeend", html);
   });
+});
+
+// Delete finihed book from the db
+document.addEventListener("click", async function (e) {
+  const btnDeleteBookshelf = e.target.closest(".btn-cancel-bookshelf");
+
+  if (!btnDeleteBookshelf) return;
+  // get key value
+  const key = btnDeleteBookshelf.dataset.bookKey;
+  // send to the server key and from the server delete the book info
+  await deleteFinishedBook(key);
+  btnDeleteBookshelf.closest(".finished").innerHTML = "";
 });

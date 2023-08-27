@@ -68,9 +68,20 @@ const sendFinishedBook = async function (bookInfo) {
 
   return res;
 };
+
+const deleteFinishedBook = async function (key) {
+  const res = await fetch("/delete-finished", ajaxHeader(key));
+
+  if (!res.ok) {
+    throw new Error("Failed to delete the book");
+  }
+
+  return res;
+};
 export {
   renderCurrentlyReading,
   renderDefaultCurrentlyReading,
   sendCurrentlyReading,
   sendFinishedBook,
+  deleteFinishedBook,
 };

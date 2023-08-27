@@ -191,9 +191,23 @@ def reading():
 
     return jsonify(curr_reading)
 
-
+# Book data of finished books
 @app.route("/finished")
 def finished():
     finish_book = db.execute("SELECT * FROM read WHERE user_id = ?", session["user_id"])
 
     return jsonify(finish_book)
+
+# delete books from finished books db
+@app.route("/delete-finished", methods=["POST"])
+def delete_finished():
+    userID = session["user_id"]
+    # get the book_key from the client side 
+    book_key = request.json
+    # delete book info from the db
+    db.execute("DELETE FROM read WHERE user_id = ? AND book_key = ? ", userID, book_key)
+
+    return redirect("/")
+
+
+    

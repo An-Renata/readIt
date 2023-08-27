@@ -57,7 +57,7 @@ const renderShowMoreInfo = (book) => {
     </div>`;
 };
 
-const renderFinishedBooks = (book) => {
+const renderUserBookList = (book) => {
   return `<li class="finished" data-book-key=${book.book_key}>
               <div class="finished-book-info">
                 <img
@@ -76,12 +76,12 @@ const renderFinishedBooks = (book) => {
               </div>
               </div>
                 <div>
-                <a href="/cancel_reading" class="btn btn-curr-box btn-cancel btn-cancel-bookshelf transition" data-book-key=${
+                <button class="btn btn-curr-box btn-cancel btn-cancel-bookshelf transition" data-book-key=${
                   book.book_key
                 }>
                   Delete
-                </a>
+                </button>
               </div>
             </li>`;
 };
-export { renderShowMoreInfo, renderSearchResults, renderFinishedBooks };
+export { renderShowMoreInfo, renderSearchResults, renderUserBookList };
