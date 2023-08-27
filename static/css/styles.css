@@ -388,3 +388,32 @@ body {
     transform: rotate(0deg);
   }
 }
+
+/* FINISHED BOOKS */
+.finished {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--bright-sand-color);
+}
+
+.finished-book-info {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+
+.book-title-bookshelf {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+.book-author-bookshelf {
+  font-size: 1.2rem;
+}
+
+.btn-cancel-bookshelf {
+  padding: 10px 15px;
+  font-weight: 600;
+  margin-right: 10px;
+  background-color: var(--bright-yellow-color);
+}

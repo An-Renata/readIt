@@ -56,4 +56,32 @@ const renderShowMoreInfo = (book) => {
       </div>
     </div>`;
 };
-export { renderShowMoreInfo, renderSearchResults };
+
+const renderFinishedBooks = (book) => {
+  return `<li class="finished" data-book-key=${book.book_key}>
+              <div class="finished-book-info">
+                <img
+                  class="book-cover-img"
+                  src="${book.book_cover}"
+                  alt="book cover photo"
+                  width="100"
+                />
+              <div class="book-info-finished">
+                <h3 class="book-title-bookshelf">
+                  ${book.title}
+                </h3>
+                <p class="book-author-bookshelf">${book.author
+                  .split(",")
+                  .join(" ")}</p>
+              </div>
+              </div>
+                <div>
+                <a href="/cancel_reading" class="btn btn-curr-box btn-cancel btn-cancel-bookshelf transition" data-book-key=${
+                  book.book_key
+                }>
+                  Delete
+                </a>
+              </div>
+            </li>`;
+};
+export { renderShowMoreInfo, renderSearchResults, renderFinishedBooks };

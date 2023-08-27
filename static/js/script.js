@@ -7,7 +7,11 @@ import {
   sendCurrentlyReading,
   sendFinishedBook,
 } from "./helpers.js";
-import { renderShowMoreInfo, renderSearchResults } from "./markup.js";
+import {
+  renderShowMoreInfo,
+  renderSearchResults,
+  renderFinishedBooks,
+} from "./markup.js";
 
 // variable to get user search input value and render windown
 const searchBar = document.getElementById("search-book");
@@ -19,6 +23,7 @@ const currReadingContainer = document.querySelector(
 const defaultCurrentlyReading = document.querySelector(
   ".default-currently-reading"
 );
+const btnRead = document.querySelector(".btn-read");
 
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
@@ -154,4 +159,20 @@ document.addEventListener("click", async (e) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+// Open window of finished books
+btnRead.addEventListener("click", async function () {
+  const res = await fetch("/finished");
+  const finishedBooks = await res.json();
+  // renderBooks;
+  renderBooks.innerHTML = "";
+  finishedBooks.forEach((el) => {
+    console.log(el);
+    // delete any previous html
+    // get html markup
+    const html = renderFinishedBooks(el);
+    // insert data into main window
+    renderBooks.insertAdjacentHTML("beforeend", html);
+  });
 });

@@ -192,4 +192,8 @@ def reading():
     return jsonify(curr_reading)
 
 
+@app.route("/finished")
+def finished():
+    finish_book = db.execute("SELECT * FROM read WHERE user_id = ?", session["user_id"])
 
+    return jsonify(finish_book)
