@@ -21,16 +21,17 @@ const spinner = document.querySelector(".spinner");
 const currReadingContainer = document.querySelector(
   ".currently-reading-container"
 );
-const defaultCurrentlyReading = document.querySelector(
-  ".default-currently-reading"
-);
+// const defaultCurrentlyReading = document.querySelector(
+//   ".default-currently-reading"
+// );
 const btnRead = document.querySelector(".btn-read");
+
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
   if (e.key === "Enter" && searchBar.value !== "") {
+    renderBooks.innerHTML = "";
+    spinner.classList.add("loader");
     try {
-      spinner.classList.add("loader");
-
       const searchResults = await getBook(searchBar.value);
 
       if (searchResults.length === 0) {
@@ -38,7 +39,6 @@ searchBar.addEventListener("keypress", async (e) => {
         spinner.classList.remove("loader");
         return;
       }
-      renderBooks.innerHTML = "";
       searchBar.value = "";
 
       searchResults.forEach((book) => {
@@ -60,9 +60,9 @@ document.addEventListener("click", async (e) => {
   const bgBlur = document.querySelector(".blurred-bg");
 
   if (btnShowMore) {
+    spinner.classList.add("loader");
     try {
       // add spinner
-      spinner.classList.add("loader");
       const key = btnShowMore.dataset.bookKey;
 
       const bookData = await renderMoreInfo(key);
@@ -73,7 +73,7 @@ document.addEventListener("click", async (e) => {
 
       bgBlur.classList.add("active");
       readmoreBox.style.display = "block";
-
+      spinner.classList.remove("loader");
       showMore = true;
     } catch (err) {
       console.log("Error occured", err);
@@ -83,7 +83,6 @@ document.addEventListener("click", async (e) => {
   if (showMore && e.target.classList.contains("active")) {
     bgBlur.classList.remove("active");
     readmoreBox.style.display = "none";
-    spinner.classList.remove("loader");
     showMore = false;
   }
 });
@@ -92,8 +91,8 @@ document.addEventListener("click", async (e) => {
 const renderReadings = async function () {
   const res = await fetch("/currently-reading");
   const currentlyReading = await res.json();
-  console.log(currentlyReading);
 
+  currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
   if (currentlyReading.length > 0) {
     // remove default currently reading
     currReadingContainer.innerHTML = "";
@@ -112,7 +111,6 @@ document.addEventListener("click", async (e) => {
 
   if (!btnCurrentlyReading) return;
 
-  // if (btnCurrentlyReading) {
   try {
     const key = btnCurrentlyReading.dataset.bookKey;
     // receive data needed for currently reading book database
@@ -134,12 +132,6 @@ document.addEventListener("click", async (e) => {
   } catch (err) {
     console.log("Error occured in script.js", err);
   }
-  // }
-  const currReading = document.querySelector(".currently-reading");
-
-  if (currReading) {
-    defaultCurrentlyReading.innerHTML = "";
-  }
 });
 
 // Send data to the bookshelf when user clicks finish book button on the currently reading box
@@ -150,9 +142,8 @@ document.addEventListener("click", async (e) => {
   if (!btnFinished) return;
   // getting the key of the currently reading book box
   const key = btnFinished.dataset.bookKey;
-  const bookData = await renderMoreInfo(key);
   // retrieving data about book
-  console.log("KEY", key);
+  const bookData = await renderMoreInfo(key);
   // sending information to the server
   await sendFinishedBook(bookData);
   // remove currently reading book from the list
@@ -189,12 +180,11 @@ btnRead.addEventListener("click", async function () {
 // Delete finished book from the db
 document.addEventListener("click", async function (e) {
   const btnDeleteBookshelf = e.target.closest(".btn-cancel-bookshelf");
-
   if (!btnDeleteBookshelf) return;
   // get key value
   const key = btnDeleteBookshelf.dataset.bookKey;
   // send to the server key and from the server delete the book info
   await deleteFinishedBook(key);
 
-  btnDeleteBookshelf.closest(".finished").innerHTML = "";
+  btnDeleteBookshelf.closest(".finished").remove();
 });

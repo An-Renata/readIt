@@ -40,58 +40,19 @@
     <div class="currently-reading-box">
       <h2 class="currently-reading-heading">currently reading</h2>
       <div class="currently-reading-container">
-        <div class="default-currently-reading">
+        <!-- <div class="default-currently-reading">
           <img
             src="../static/img/currently-reading.svg"
             alt="reading girl icon"
             width="100"
           />
           <p>Add books you are currently reading</p>
-        </div>
-        <!-- {% if curr_reading %} {% for book in curr_reading %}
-        <section
-          class="currently-reading"
-          data-book-key='{{ book["book_key"] }}'
-        >
-          <div class="img-box">
-            <img
-              class="book-cover-img"
-              src="{{ book['book_cover'] }}"
-              alt="book cover photo"
-            />
-          </div>
-          <div class="book-info">
-            <h3 class="book-title">{{ book["title"] }}</h3>
-            <p class="book-author">{{ book["author"] }}</p>
-            <button
-              class="btn btn-curr-box btn-finished transition"
-              data-book-key='{{ book["book_key"] }}'
-            >
-              Finished!
-            </button>
-            <button
-              class="btn btn-curr-box btn-cancel transition"
-              data-book-key='{{ book["book_key"] }}'
-            >
-              Cancel reading
-            </button>
-          </div>
-        </section>
-        {% endfor %} {% else %}
-        <div class="default-currently-reading">
-          <img
-            src="../static/img/currently-reading.svg"
-            alt="reading girl icon"
-            width="100"
-          />
-          <p>Add books you are currently reading</p>
-        </div>
-        {% endif %} -->
+        </div> -->
       </div>
     </div>
     <main>
+      <span class="spinner"></span>
       <div class="render-book-window">
-        <span class="spinner"></span>
         <ul>
           <!-- INPUT FROM JS SEARCH RESULTS -->
         </ul>

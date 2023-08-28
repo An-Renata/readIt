@@ -78,10 +78,22 @@ const deleteFinishedBook = async function (key) {
 
   return res;
 };
+
+// delete book from currently reading container
+const deleteCurrentlyReading = async function (key) {
+  const res = await fetch("/delete-currently-reading", ajaxHeader(key));
+
+  if (!res.ok) {
+    throw new Error("Failed to delete the book");
+  }
+
+  return res;
+};
 export {
   renderCurrentlyReading,
   renderDefaultCurrentlyReading,
   sendCurrentlyReading,
   sendFinishedBook,
   deleteFinishedBook,
+  deleteCurrentlyReading,
 };

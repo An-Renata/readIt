@@ -76,7 +76,7 @@ const renderUserBookList = (book) => {
               </div>
               </div>
                 <div>
-                <button class="btn btn-curr-box btn-cancel btn-cancel-bookshelf transition" data-book-key=${
+                <button class="btn btn-curr-box btn-cancel-bookshelf transition" data-book-key=${
                   book.book_key
                 }>
                   Delete

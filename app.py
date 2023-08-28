@@ -169,7 +169,7 @@ def update_curr_reading():
 
 # Clicked finish button on the currently reading box, DELETES book from curr_reading and INSERTS to bookshelf(read)
 @app.route("/finished", methods=["POST"])
-def delete_currently_reading():
+def insert_to_bookshelf():
     userID = session["user_id"]
     # getting data from the JS about finished book
     book_data = request.json
@@ -184,6 +184,17 @@ def delete_currently_reading():
 
     return redirect('/')
 
+
+# ! Add route to cancel book from the currently reading list
+@app.route("/delete-currently-reading", methods=["POST"])
+def delete_from_currently_reading():
+    book_key = request.json
+
+    db.execute("DELETE FROM currently_reading WHERE user_id = ? AND book_key = ?", session["user_id"], book_key)
+    
+    return redirect('/')
+
+
 # send json data from the server to js about currently reading books
 @app.route('/reading')
 def reading():
@@ -193,12 +204,16 @@ def reading():
 
     return jsonify(curr_reading)
 
+
+
 # Book data of finished books
 @app.route("/bookshelf")
 def finished():
     finish_book = db.execute("SELECT * FROM read WHERE user_id = ?", session["user_id"])
 
     return jsonify(finish_book)
+
+
 
 # delete books from finished books db
 @app.route("/delete-finished", methods=["POST"])
@@ -212,4 +227,10 @@ def delete_finished():
     return redirect("/")
 
 
-    
+# send book list of want-to-read to client side
+@app.route("/want-to-read")
+def want_to_read():
+    to_read = db.execute("SELECT * FROM want_to_read WHERE user_id", session["user_id"])
+
+    return jsonify(to_read)
+
