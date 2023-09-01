@@ -1,5 +1,7 @@
 "use strict";
-
+//? AJAX HEADER FOR "POST" request
+// Generates and return a configuration object that can be used for making a "POST" request to a server using AJAX.
+// The purpose of this function is to prevent code redundancy and repetition.
 const ajaxHeader = (bookInfo) => {
   return {
     method: "POST",
@@ -10,6 +12,9 @@ const ajaxHeader = (bookInfo) => {
   };
 };
 
+//? CURRENTLY READING BOX MARKUP
+// Generate and insert HTML content into a specified container on the UI.
+// It represents a "currently reading" book section, including its cover image, title, author and action buttons (finished, cancel reading)
 const renderCurrentlyReading = function (book, container) {
   const html = `
    <section class="currently-reading" data-book-key=${book.book_key}>
@@ -38,6 +43,8 @@ const renderCurrentlyReading = function (book, container) {
   container.insertAdjacentHTML("beforeend", html);
 };
 
+//? DEFAULT CURRENTLY READING MARKUP
+// Generate and return HTML content representing a default message with an icon for a "currently reading" section when no books are actively being read.
 const renderDefaultCurrentlyReading = function () {
   return `<div class="default-currently-reading">
             <img
@@ -49,9 +56,13 @@ const renderDefaultCurrentlyReading = function () {
           </div>`;
 };
 
+//? AJAX / CURRENTLY READING
+// Sending information about a currently reading book to a server. The function utilizes the fetch API to make a POST request with the provided book information.
 const sendCurrentlyReading = async function (bookInfo) {
   const res = await fetch("/currently-reading", ajaxHeader(bookInfo));
 
+  // Checks if the server response (res) indicates a successful operation.
+  // If the res indicates an error, an error message is thrown.
   if (!res.ok) {
     throw new Error("Failed to send currently reading book info to the server");
   }
@@ -59,28 +70,34 @@ const sendCurrentlyReading = async function (bookInfo) {
   return res;
 };
 
+//? AJAX / WANT TO READ
+// Sending information about want to read book to a server.
+// Making a post request to save book as status "want to read"
+const sendWantToRead = async function (bookInfo) {
+  const res = await fetch("/want-to-read", ajaxHeader(bookInfo));
+
+  if (!res.ok) {
+    throw new Error("Failed to send currently reading book info to the server");
+  }
+};
+
+//? AJAX / FINISH BUTTON from currently reading box
+// Sending information about finished book to a server. The function utilizes the fetch API to make a POST request with the provided book information.
 const sendFinishedBook = async function (bookInfo) {
   const res = await fetch("/finished", ajaxHeader(bookInfo));
 
+  // Checks if the server response (res) indicates a successful operation.
+  // If the res indicates an error, an error message is thrown.
   if (!res.ok) {
     throw new Error("Failed to send Finished book");
   }
 
   return res;
 };
-// delete book from the bookshelf
-const deleteFinishedBook = async function (key) {
-  const res = await fetch("/delete-finished", ajaxHeader(key));
-
-  if (!res.ok) {
-    throw new Error("Failed to delete the book");
-  }
-
-  return res;
-};
-
-// delete book from currently reading container
+//? CANCEL READING BUTTON / currently reading box
+// Delete book with the status of 'currently reading'
 const deleteCurrentlyReading = async function (key) {
+  // Posting data with the book key
   const res = await fetch("/delete-currently-reading", ajaxHeader(key));
 
   if (!res.ok) {
@@ -89,6 +106,22 @@ const deleteCurrentlyReading = async function (key) {
 
   return res;
 };
+
+//? AJAX / DELETE FROM BOOKSHELF
+// Sending information about canceled book to a server. The function utilizes the fetch API to make a POST request with the provided book information.
+// This function button is available in the currently reading container.
+const deleteFinishedBook = async function (key) {
+  const res = await fetch("/delete-finished", ajaxHeader(key));
+
+  // Checks if the server response (res) indicates a successful operation.
+  // If the res indicates an error, an error message is thrown.
+  if (!res.ok) {
+    throw new Error("Failed to delete the book");
+  }
+
+  return res;
+};
+
 export {
   renderCurrentlyReading,
   renderDefaultCurrentlyReading,
@@ -96,4 +129,5 @@ export {
   sendFinishedBook,
   deleteFinishedBook,
   deleteCurrentlyReading,
+  sendWantToRead,
 };
