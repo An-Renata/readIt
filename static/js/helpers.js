@@ -12,6 +12,12 @@ const ajaxHeader = (bookInfo) => {
   };
 };
 
+//? CHECK CURRENTLY READING CONTAINER
+// Function returns boolean value if the currently reading container empty: render default value, otherwise display books
+const checkIfEmpty = function (container) {
+  return !container.textContent.trim() && container.children.length === 0;
+};
+
 //? CURRENTLY READING BOX MARKUP
 // Generate and insert HTML content into a specified container on the UI.
 // It represents a "currently reading" book section, including its cover image, title, author and action buttons (finished, cancel reading)
@@ -81,6 +87,17 @@ const sendWantToRead = async function (bookInfo) {
   }
 };
 
+//? AJAX / FINISHED (btn from search results)
+// Sending information about finished book to a server. The button that triggers this call is from search results "finished" button
+const addFinished = async function (bookInfo) {
+  const res = await fetch("/add-finished", ajaxHeader(bookInfo));
+
+  if (!res.ok) {
+    throw new Error("Failed to send Finished book");
+  }
+
+  return res;
+};
 //? AJAX / FINISH BUTTON from currently reading box
 // Sending information about finished book to a server. The function utilizes the fetch API to make a POST request with the provided book information.
 const sendFinishedBook = async function (bookInfo) {
@@ -130,4 +147,6 @@ export {
   deleteFinishedBook,
   deleteCurrentlyReading,
   sendWantToRead,
+  checkIfEmpty,
+  addFinished,
 };

@@ -9,6 +9,8 @@ import {
   deleteFinishedBook,
   deleteCurrentlyReading,
   sendWantToRead,
+  checkIfEmpty,
+  addFinished,
 } from "./helpers.js";
 import {
   renderShowMoreInfo,
@@ -159,7 +161,7 @@ document.addEventListener("click", async (e) => {
       document.querySelector(".default-currently-reading").remove();
     }
 
-    btnCurrentlyReading.innerHTML = "Added";
+    // btnCurrentlyReading.innerHTML = "Added";
   } catch (err) {
     console.log("Error occured in script.js", err);
   }
@@ -170,10 +172,9 @@ document.addEventListener("click", async (e) => {
 document.addEventListener("click", async (e) => {
   // Target for the button
   const wantToRead = e.target.closest(".add-want-to-read");
-
+  // Create variable of currently-reading book section
+  // Need to check if a selected book is not on currently reading list, if yes: update the UI
   if (!wantToRead) return;
-
-  console.log("clicked");
 
   try {
     const key = wantToRead.dataset.bookKey;
@@ -182,12 +183,44 @@ document.addEventListener("click", async (e) => {
     // Sending collected data to the server
     await sendWantToRead(bookData);
 
-    wantToRead.innerHTML = "Added";
+    //! GRĮŽTI ČIA
+    // If selected book key from the search result matches with the currently reading book key, remove it from the UI
+    // if (checkCurrReading && checkCurrReading.dataset.bookKey === key) {
+    //   checkCurrReading.remove();
+    // }
+    // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
+    if (checkIfEmpty(currReadingContainer)) {
+      currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
+    }
+
+    // wantToRead.innerHTML = "Added";
   } catch (err) {
     console.log(err);
   }
 });
 
+//? SEARCH QUERY / FINISHED
+// Send data to the bookshelf when user clicks finish button in the rendered rsearch results
+document.addEventListener("click", async (e) => {
+  // look for the closest button Finished
+  const read = e.target.closest(".add-to-read");
+
+  if (!read) return;
+  try {
+    const key = read.dataset.bookKey;
+    read.innerHTML = "Added";
+    // Getting data about the book from the fetch function
+    const bookData = await renderMoreInfo(key);
+    // Send book data to the server side to insert a new book or update its status
+    await addFinished(bookData);
+    //!!!!!!!!!!!!!!!!!!!
+    // if (checkIfEmpty(currReadingContainer)) {
+    //   currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
+    // }
+  } catch (err) {
+    console.log(err);
+  }
+});
 //? FINISH BUTTON IN CURRENTLY READING CONTAINER
 // Send data to the bookshelf when user clicks finish book button in the currently reading box
 // Waiting for a user to click on one of the finish buttons
@@ -207,12 +240,8 @@ document.addEventListener("click", async (e) => {
   if (currReading && currReading.dataset.bookKey === key) {
     btnFinished.closest(".currently-reading").remove();
   }
-  // If there is no currently reading books, render the default HTML layout
-  // Trim the whitespace, otherwise it still have some html left
-  if (
-    !currReadingContainer.textContent.trim() &&
-    currReadingContainer.children.length === 0
-  ) {
+  // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
+  if (checkIfEmpty(currReadingContainer)) {
     currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
   }
 });

@@ -302,3 +302,22 @@ def want_to_read():
         want_to_read = db.execute("SELECT * FROM readings WHERE user_id = ? AND status = ?", userID, status[2])
 
         return jsonify(want_to_read)
+
+#? ADD FINISHED BOOK (from search results btn)
+# Insert book to the bookshelf or update book status
+@app.route("/add-finished", methods=["POST"])
+def addBook():
+    userID = session["user_id"]
+
+    book_data = request.json
+    print("BOOK DATA!!!", book_data)
+
+    book_row = db.execute("SELECT * FROM readings WHERE user_id = ? AND title = ?", userID, book_data["title"])
+
+    if len(book_row) != 1:
+        authors = ", ".join(book_data["author"])
+        db.execute("INSERT INTO readings (user_id, title, author, book_cover, book_key, status) VALUES (?, ?, ?, ?, ?, ?)", userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"], status[1])
+    else:
+        db.execute("UPDATE readings SET status = ? WHERE user_id = ? AND title = ?", status[2], userID, book_data["title"])
+
+    return redirect("/")
