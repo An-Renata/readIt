@@ -49,6 +49,21 @@ const renderCurrentlyReading = function (book, container) {
   container.insertAdjacentHTML("beforeend", html);
 };
 
+//? CHECK IF BOOK CURRENTLY READING TO AVOID RECURRENCE
+// Looping through currently reading container to check if the same book user wants to add are already in the list
+const isBookAlreadyAdded = function (key, container) {
+  // Select currently reading books
+  const booksInCurrReading = container.querySelectorAll(".currently-reading");
+  // Compare the dataset book keys with the key from "add-currently-reading" button
+  for (const book of booksInCurrReading) {
+    if (book.dataset.bookKey === key) {
+      return true;
+    }
+  }
+  // If no match found, return false and render book in the UI
+  return false;
+};
+
 //? DEFAULT CURRENTLY READING MARKUP
 // Generate and return HTML content representing a default message with an icon for a "currently reading" section when no books are actively being read.
 const renderDefaultCurrentlyReading = function () {
@@ -149,4 +164,5 @@ export {
   sendWantToRead,
   checkIfEmpty,
   addFinished,
+  isBookAlreadyAdded,
 };

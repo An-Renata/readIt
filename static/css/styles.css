@@ -187,6 +187,7 @@ body {
   flex-direction: column;
   row-gap: 5px;
   min-height: 80vh;
+  /* max-height: 85vh; */
 }
 
 .search-result {
@@ -266,6 +267,9 @@ body {
 }
 .add-currently-reading:hover {
   background-color: #ece5e2;
+}
+.added {
+  background-color: #ea5167;
 }
 /* ASIDE BOX */
 .aside-box {
@@ -356,7 +360,7 @@ body {
   border: 3px solid var(--bright-sand-color);
   border-radius: 50%;
   display: block;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%);
@@ -366,7 +370,7 @@ body {
 .loader::after {
   content: "";
   box-sizing: border-box;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

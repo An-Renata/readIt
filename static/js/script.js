@@ -11,6 +11,7 @@ import {
   sendWantToRead,
   checkIfEmpty,
   addFinished,
+  isBookAlreadyAdded,
 } from "./helpers.js";
 import {
   renderShowMoreInfo,
@@ -50,8 +51,6 @@ searchBar.addEventListener("keypress", async (e) => {
       }
       // Empty search bar value after search results are shown
       searchBar.value = "";
-      // console.log(searchResults);
-
       // Render search results in the UI as unordered list
       searchResults.forEach((book) => {
         // Returns HTML markup
@@ -137,31 +136,44 @@ renderReadings();
 document.addEventListener("click", async (e) => {
   // Target for the btn
   const btnCurrentlyReading = e.target.closest(".add-currently-reading");
+  const defaultHTML = document.querySelector(".default-currently-reading");
 
   if (!btnCurrentlyReading) return;
 
+  spinner.classList.add("loader");
   try {
     // Get the dataset book key from the selected book
     const key = btnCurrentlyReading.dataset.bookKey;
-    // Get info about the book to save in the database
-    const bookData = await renderMoreInfo(key);
-    // Send data about selected book to the server and save it
-    await sendCurrentlyReading(bookData);
-    // Fetching data from the server side about currently reading books to render on the UI
-    const getBook = await fetch("/reading");
-    const book = await getBook.json();
-    // Take the last added book from the list
-    const lastAdded = book.slice(-1);
-    // Render result in the UI
-    lastAdded.map((el) => {
-      renderCurrentlyReading(el, currReadingContainer);
-    });
-    // Handle default HMTL markup if there is the list of books
-    if (document.querySelector(".default-currently-reading")) {
-      document.querySelector(".default-currently-reading").remove();
-    }
+    // Call function to compare currently-reading books book_key with the key value
+    if (isBookAlreadyAdded(key, currReadingContainer)) {
+      alert("Book is already added");
+      spinner.classList.remove("loader");
+      return;
+    } else {
+      // Get info about the book to save in the database
+      const bookData = await renderMoreInfo(key);
+      // Send data about selected book to the server and save it
+      await sendCurrentlyReading(bookData);
+      // Fetching data from the server side about currently reading books to render on the UI
+      const getBook = await fetch("/reading");
+      const books = await getBook.json();
+      // Take the last added book from the list
+      const lastAdded = books.slice(-1);
+      // Render result in the UI
+      lastAdded.forEach((book) => {
+        renderCurrentlyReading(book, currReadingContainer);
+      });
+      // books.forEach((book) => {
+      //   renderCurrentlyReading(book, currReadingContainer);
+      // });
+      // Handle default HMTL markup if there is the list of books
+      if (defaultHTML) {
+        defaultHTML.remove();
+      }
 
-    // btnCurrentlyReading.innerHTML = "Added";
+      spinner.classList.remove("loader");
+      btnCurrentlyReading.innerHTML = "Added";
+    }
   } catch (err) {
     console.log("Error occured in script.js", err);
   }
@@ -176,6 +188,8 @@ document.addEventListener("click", async (e) => {
   // Need to check if a selected book is not on currently reading list, if yes: update the UI
   if (!wantToRead) return;
 
+  spinner.classList.add("loader");
+
   try {
     const key = wantToRead.dataset.bookKey;
     // Collecting data about selected book
@@ -184,16 +198,18 @@ document.addEventListener("click", async (e) => {
     await sendWantToRead(bookData);
 
     //! GRĮŽTI ČIA
+    // const checkCurrReading = document.querySelector(".currently-reading");
     // If selected book key from the search result matches with the currently reading book key, remove it from the UI
     // if (checkCurrReading && checkCurrReading.dataset.bookKey === key) {
-    //   checkCurrReading.remove();
+
     // }
     // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
     if (checkIfEmpty(currReadingContainer)) {
       currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
     }
 
-    // wantToRead.innerHTML = "Added";
+    wantToRead.innerHTML = "Added";
+    spinner.classList.remove("loader");
   } catch (err) {
     console.log(err);
   }
@@ -206,21 +222,28 @@ document.addEventListener("click", async (e) => {
   const read = e.target.closest(".add-to-read");
 
   if (!read) return;
+  // Add loader till try block is done executing
+  spinner.classList.add("loader");
   try {
     const key = read.dataset.bookKey;
-    read.innerHTML = "Added";
     // Getting data about the book from the fetch function
     const bookData = await renderMoreInfo(key);
     // Send book data to the server side to insert a new book or update its status
     await addFinished(bookData);
+
     //!!!!!!!!!!!!!!!!!!!
-    // if (checkIfEmpty(currReadingContainer)) {
-    //   currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
-    // }
+    if (checkIfEmpty(currReadingContainer)) {
+      currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
+    }
+    //
+    read.innerHTML = "Added";
+    // Remove spinner when book is added/updated
+    spinner.classList.remove("loader");
   } catch (err) {
     console.log(err);
   }
 });
+
 //? FINISH BUTTON IN CURRENTLY READING CONTAINER
 // Send data to the bookshelf when user clicks finish book button in the currently reading box
 // Waiting for a user to click on one of the finish buttons
@@ -237,9 +260,11 @@ document.addEventListener("click", async (e) => {
   // Sending information about the to the server with the book_key
   await sendFinishedBook(key);
   // Remove currently reading book from the list in the UI
-  if (currReading && currReading.dataset.bookKey === key) {
+  if (isBookAlreadyAdded(key, currReadingContainer)) {
     btnFinished.closest(".currently-reading").remove();
   }
+  // if (currReading && currReading.dataset.bookKey === key) {
+  // }
   // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
   if (checkIfEmpty(currReadingContainer)) {
     currReadingContainer.innerHTML = renderDefaultCurrentlyReading();

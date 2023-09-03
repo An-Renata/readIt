@@ -318,6 +318,6 @@ def addBook():
         authors = ", ".join(book_data["author"])
         db.execute("INSERT INTO readings (user_id, title, author, book_cover, book_key, status) VALUES (?, ?, ?, ?, ?, ?)", userID, book_data["title"], authors, book_data["book_cover"], book_data["book_key"], status[1])
     else:
-        db.execute("UPDATE readings SET status = ? WHERE user_id = ? AND title = ?", status[2], userID, book_data["title"])
+        db.execute("UPDATE readings SET status = ? WHERE user_id = ? AND title = ?", status[1], userID, book_data["title"])
 
     return redirect("/")
