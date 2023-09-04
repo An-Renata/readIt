@@ -5,7 +5,7 @@
 <div class="container">
   <!-- <header class="header"> -->
   <!-- display username using js when user ir logged in -->
-  <h1 class="greet-user">Hello, {{ username }} 📖</h1>
+  <h1 class="greet-user"><a href="/">Hello, {{ username }} 📖</a></h1>
   <div class="search-bar">
     <!-- search icon -->
     <svg
@@ -33,7 +33,7 @@
       autocomplete="off"
     />
   </div>
-  <button class="btn-log-out"><a href="/logout">Log out</a></button>
+  <a href="/logout" class="btn-log-out">Log out</a>
   <!-- </header> -->
   <!-- <div class="container-main"> -->
   <!-- Making layout, all values will be changed according to API call -->
@@ -53,6 +53,14 @@
   <main>
     <span class="spinner"></span>
     <div class="render-book-window">
+      <div class="search-default-layout">
+        <img
+          src="../static/img/searching.svg"
+          alt="Searching logo"
+          width="150"
+        />
+        <p class="search-books-default">Search for books</p>
+      </div>
       <ul>
         <!-- INPUT FROM JS SEARCH RESULTS -->
       </ul>
@@ -63,13 +71,13 @@
   </main>
   <aside class="aside-box">
     <!-- <a href="/bookshelf"> -->
-    <button class="btn-read transition">
-      <img src="../static/img/read-100.png" alt="book icon" />
+    <button class="btn-read">
+      <img src="../static/img/bookshelf.svg" alt="book icon" width="100" />
       <p>Bookshelf</p>
     </button>
     <!-- </a> -->
-    <button class="btn-want-to-read transition">
-      <img src="../static/img/want-to-read-100.png" alt="open book" srcset="" />
+    <button class="btn-want-to-read">
+      <img src="../static/img/want-to-read.svg" alt="open book" width="100" />
       <p>Want to read</p>
     </button>
   </aside>

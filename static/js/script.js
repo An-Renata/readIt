@@ -31,7 +31,6 @@ const btnWantToRead = document.querySelector(".btn-want-to-read");
 
 //? SEARCH BAR QUERY
 // ASYNC call for book info to display in the main window
-
 searchBar.addEventListener("keypress", async (e) => {
   // Listen for a key "Enter" and do not call following code if the input is empty
   if (e.key === "Enter" && searchBar.value !== "") {

@@ -32,7 +32,7 @@ const renderCurrentlyReading = function (book, container) {
         />
       </div>
       <div class="book-info">
-        <h3 class="book-title">
+        <h3 class="book-title-curr-reading">
           ${book.title}
         </h3>
         <p class="book-author">${book.author}</p>
