@@ -31,6 +31,7 @@ const btnWantToRead = document.querySelector(".btn-want-to-read");
 
 //? SEARCH BAR QUERY
 // ASYNC call for book info to display in the main window
+
 searchBar.addEventListener("keypress", async (e) => {
   // Listen for a key "Enter" and do not call following code if the input is empty
   if (e.key === "Enter" && searchBar.value !== "") {
@@ -42,13 +43,6 @@ searchBar.addEventListener("keypress", async (e) => {
       // Query for a book.
       // getBook function fetches a book based on the user input value
       const searchResults = await getBook(searchBar.value);
-
-      //! TVARKYTI
-      if (searchResults.length === 0) {
-        alert("No book found!");
-        spinner.classList.remove("loader");
-        return;
-      }
       // Empty search bar value after search results are shown
       searchBar.value = "";
       // Render search results in the UI as unordered list
@@ -61,7 +55,9 @@ searchBar.addEventListener("keypress", async (e) => {
         spinner.classList.remove("loader");
       });
     } catch (err) {
-      console.log("error occured, ", err);
+      alert("No book found!");
+      spinner.classList.remove("loader");
+      console.log("error occured");
     }
   }
 });
@@ -150,6 +146,8 @@ document.addEventListener("click", async (e) => {
       spinner.classList.remove("loader");
       return;
     } else {
+      // !!!!!!!!!!!!!
+      // btnCurrentlyReading.disabled = "true";
       // Get info about the book to save in the database
       const bookData = await renderMoreInfo(key);
       // Send data about selected book to the server and save it
@@ -163,16 +161,12 @@ document.addEventListener("click", async (e) => {
       lastAdded.forEach((book) => {
         renderCurrentlyReading(book, currReadingContainer);
       });
-      // books.forEach((book) => {
-      //   renderCurrentlyReading(book, currReadingContainer);
-      // });
+
       // Handle default HMTL markup if there is the list of books
       if (defaultHTML) {
         defaultHTML.remove();
       }
-
       spinner.classList.remove("loader");
-      btnCurrentlyReading.innerHTML = "Added";
     }
   } catch (err) {
     console.log("Error occured in script.js", err);
@@ -197,18 +191,22 @@ document.addEventListener("click", async (e) => {
     // Sending collected data to the server
     await sendWantToRead(bookData);
 
-    //! GRĮŽTI ČIA
-    // const checkCurrReading = document.querySelector(".currently-reading");
-    // If selected book key from the search result matches with the currently reading book key, remove it from the UI
-    // if (checkCurrReading && checkCurrReading.dataset.bookKey === key) {
-
-    // }
+    // If Book is already on the currently reading list and user clicks want-to-read, remove the book from currently while in the backend it is inserted in "want to read" shelf
+    if (isBookAlreadyAdded(key, currReadingContainer)) {
+      // Select all currently-reading sections
+      const removeEl = document.querySelectorAll(".currently-reading");
+      // Loop through each of them and search for the same key
+      for (const book of removeEl) {
+        if (book.dataset.bookKey === key) {
+          book.remove();
+        }
+      }
+    }
     // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
     if (checkIfEmpty(currReadingContainer)) {
       currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
     }
 
-    wantToRead.innerHTML = "Added";
     spinner.classList.remove("loader");
   } catch (err) {
     console.log(err);
@@ -231,12 +229,19 @@ document.addEventListener("click", async (e) => {
     // Send book data to the server side to insert a new book or update its status
     await addFinished(bookData);
 
-    //!!!!!!!!!!!!!!!!!!!
+    if (isBookAlreadyAdded(key, currReadingContainer)) {
+      // Select all currently-reading sections
+      const removeEl = document.querySelectorAll(".currently-reading");
+      // Loop through each of them and search for the same key
+      for (const book of removeEl) {
+        if (book.dataset.bookKey === key) {
+          book.remove();
+        }
+      }
+    }
     if (checkIfEmpty(currReadingContainer)) {
       currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
     }
-    //
-    read.innerHTML = "Added";
     // Remove spinner when book is added/updated
     spinner.classList.remove("loader");
   } catch (err) {
@@ -250,7 +255,6 @@ document.addEventListener("click", async (e) => {
 document.addEventListener("click", async (e) => {
   // Store into variables to avoid repetitive code
   const btnFinished = e.target.closest(".btn-finished");
-  const currReading = document.querySelector(".currently-reading");
 
   // Don't throw an error if the btnFinished isn't clicked
   if (!btnFinished) return;

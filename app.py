@@ -59,11 +59,6 @@ def index():
     # db.execute returns dictionary, so to access the username I need to access the first element
     username = user[0]["username"]
 
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # curr_reading = db.execute(
-    #     "SELECT * FROM currently_reading WHERE user_id = ?", userID)
-    # curr_reading=curr_reading
-
     # Render template of index.html which will be displayed based on the users data
     return render_template('/index.html', username=username.capitalize())
 
@@ -310,7 +305,6 @@ def addBook():
     userID = session["user_id"]
 
     book_data = request.json
-    print("BOOK DATA!!!", book_data)
 
     book_row = db.execute("SELECT * FROM readings WHERE user_id = ? AND title = ?", userID, book_data["title"])
 
