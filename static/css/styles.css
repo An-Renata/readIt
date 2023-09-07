@@ -34,10 +34,11 @@ body {
   margin: 0 auto;
   /* !TEST! */
   display: grid;
-  grid-template-columns: 20rem 3fr 1fr;
-  padding: 10px;
-  grid-template-rows: 50px 3fr;
-  grid-gap: 10px;
+  /* grid-template-columns: 15rem minmax(30%, 3fr) 1fr; */
+  grid-template-columns: 20rem minmax(20rem, 3fr) 15rem;
+  padding: 1rem;
+  grid-template-rows: 5rem 3fr;
+  grid-gap: 1rem;
 }
 
 /*? GREET USER TEXT */
@@ -485,4 +486,8 @@ body {
 }
 .transition {
   transition: all 0.3s;
+}
+
+.added {
+  background-color: red;
 }

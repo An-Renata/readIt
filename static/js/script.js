@@ -61,6 +61,24 @@ searchBar.addEventListener("keypress", async (e) => {
   }
 });
 
+//!!!!!!!!!!!! TESTING
+// const btnMainBook = document.querySelectorAll(".btn-main-book");
+
+// btnMainBook.forEach((section) => {
+//   const buttonAdd = section.querySelectorAll(".add-btn");
+
+//   buttonAdd.forEach((btn) => {
+//     btn.addEventListener("click", () => {
+//       buttonAdd.forEach((button) => {
+//         if (button !== btn) {
+//           button.classList.remove("added");
+//         }
+//       });
+//       btn.classList.toggle("added");
+//     });
+//   });
+// });
+
 //? SHOW MORE BUTTON
 // Handle pop up window when user clicks on the show more button
 let showMore = false;

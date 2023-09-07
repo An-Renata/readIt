@@ -22,17 +22,17 @@ const renderSearchResults = (book) => {
       <button class="show-more-btn" data-book-key=${book.key}>Show more</button>
     </div>
     <div class="btn-main-book" >
-      <button class="add-btn add-want-to-read transition" data-book-key=${
+      <button class="add-btn add-want-to-read transition " data-book-key=${
         book.key
       }>
         Want to read
       </button>
-      <button class="add-btn add-currently-reading transition" data-book-key=${
+      <button class="add-btn add-currently-reading transition " data-book-key=${
         book.key
       }>
         Currently reading
       </button>
-      <button class="add-btn add-to-read transition" data-book-key=${
+      <button class="add-btn add-to-read transition " data-book-key=${
         book.key
       }>Finished</button>
     </div>
