@@ -211,4 +211,12 @@
   .show-more-container {
     padding: 5px;
   }
+
+  .btn-reading-books {
+    padding: 10px;
+    width: 100px;
+    display: flex;
+    row-gap: 5px;
+    flex-direction: column;
+  }
 }

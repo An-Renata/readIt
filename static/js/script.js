@@ -17,6 +17,7 @@ import {
   renderShowMoreInfo,
   renderSearchResults,
   renderUserBookList,
+  renderUserCurrentlyReadingMobile,
 } from "./markup.js";
 
 // variable to get user search input value and render windown
@@ -28,6 +29,7 @@ const currReadingContainer = document.querySelector(
 );
 const btnRead = document.querySelector(".btn-read");
 const btnWantToRead = document.querySelector(".btn-want-to-read");
+const btnCurrReadingMobile = document.querySelector(".btn-currently-reading");
 
 //? SEARCH BAR QUERY
 // ASYNC call for book info to display in the main window
@@ -282,7 +284,11 @@ document.addEventListener("click", async (e) => {
   await sendFinishedBook(key);
   // Remove currently reading book from the list in the UI
   if (isBookAlreadyAdded(key, currReadingContainer)) {
-    btnFinished.closest(".currently-reading").remove();
+    if (btnFinished.closest(".currently-reading")) {
+      btnFinished.closest(".currently-reading").remove();
+    } else {
+      btnFinished.closest(".finished").remove();
+    }
   }
   // if (currReading && currReading.dataset.bookKey === key) {
   // }
@@ -304,7 +310,13 @@ document.addEventListener("click", async function (e) {
   // Send data to delete the book from currently reading list
   await deleteCurrentlyReading(key);
   // Update the UI and remove the selected book box
-  btnCancel.closest(".currently-reading").remove();
+  // If user on the phone, remove from the reading box list
+  if (btnCancel.closest(".currently-reading")) {
+    btnCancel.closest(".currently-reading").remove();
+  } else {
+    btnCancel.closest(".finished").remove();
+  }
+  // btnCancel.closest(".currently-reading").remove();
 
   // Handle condition if there is no currently reading books, render default HTML markup
   if (
@@ -368,6 +380,24 @@ btnWantToRead.addEventListener("click", async function () {
   toReadBook.forEach((el) => {
     // Function returns HTML markup as unordered list
     const html = renderUserBookList(el);
+    // Insert HTML markup to the UI
+    renderBooks.insertAdjacentHTML("beforeend", html);
+  });
+});
+
+//? CURRENTLY READING CONTAINER (MOBILE VERSION)
+// Open currently reading books in separate window like bookshefl and want to read boxes
+btnCurrReadingMobile.addEventListener("click", async function () {
+  // Fetch books user is currently reading from the server
+  const res = await fetch("/reading");
+  const readingNow = await res.json();
+
+  // Empty renderBooks HTML before showing want to read window if a user used search bar or the bookshelf was opened
+  renderBooks.innerHTML = "";
+
+  readingNow.forEach((el) => {
+    // Function returns HTML markup as unordered list
+    const html = renderUserCurrentlyReadingMobile(el);
     // Insert HTML markup to the UI
     renderBooks.insertAdjacentHTML("beforeend", html);
   });

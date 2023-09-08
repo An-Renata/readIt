@@ -1,7 +1,7 @@
 // html markup to insert data about the book
 const renderSearchResults = (book) => {
   return `
-  <li class="search-result">
+  <div class="search-result">
       ${
         book.book_cover
           ? `<img class="search-book-cover" src="${book.book_cover}" alt="book cover photo" />`
@@ -34,7 +34,7 @@ const renderSearchResults = (book) => {
         book.key
       }>Finished</button>
     </div>
-  </li>
+  </div>
 `;
 };
 
@@ -58,7 +58,7 @@ const renderShowMoreInfo = (book) => {
 };
 
 const renderUserBookList = (book) => {
-  return `<li class="finished" data-book-key=${book.book_key}>
+  return `<div class="finished" data-book-key=${book.book_key}>
               <div class="finished-book-info">
                 <img
                   class="book-cover-img"
@@ -82,6 +82,44 @@ const renderUserBookList = (book) => {
                   Delete
                 </button>
               </div>
-            </li>`;
+            </div>`;
 };
-export { renderShowMoreInfo, renderSearchResults, renderUserBookList };
+
+const renderUserCurrentlyReadingMobile = (book) => {
+  return `<div class="finished" data-book-key=${book.book_key}>
+              <div class="finished-book-info">
+                  <img
+                    class="book-cover-img"
+                    src="${book.book_cover}"
+                    alt="book cover photo"
+                    width="100"
+                  />
+                <div class="book-info-finished">
+                  <h3 class="book-title-bookshelf">
+                    ${book.title}
+                  </h3>
+                  <p class="book-author-bookshelf">${book.author
+                    .split(",")
+                    .join(" ")}</p>
+                </div>
+              </div>
+              <div class="btn-reading-books">
+              <button class="btn btn-curr-box btn-finished transition" data-book-key=${
+                book.book_key
+              }>
+                Finished!
+              </button>
+              <button class="btn btn-curr-box btn-cancel transition" data-book-key=${
+                book.book_key
+              }>
+                Cancel reading
+              </button>
+            </div>
+          </div>`;
+};
+export {
+  renderShowMoreInfo,
+  renderSearchResults,
+  renderUserBookList,
+  renderUserCurrentlyReadingMobile,
+};

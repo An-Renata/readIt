@@ -315,3 +315,4 @@ def addBook():
         db.execute("UPDATE readings SET status = ? WHERE user_id = ? AND title = ?", status[1], userID, book_data["title"])
 
     return redirect("/")
+    
