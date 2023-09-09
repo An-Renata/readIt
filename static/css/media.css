@@ -169,16 +169,19 @@
   }
   /* render search results */
   .search-result {
-    grid-template-columns: 1fr 2fr 1fr;
-    align-self: center;
-    justify-self: center;
+    grid-template-columns: 100px 2fr 1fr;
+    /* align-self: center;
+    justify-self: center; */
   }
   .mobile-query {
     width: 70px;
     justify-content: center;
     justify-self: end;
   }
-
+  .book-title-bookshelf,
+  .book-author-bookshelf {
+    font-size: 1rem;
+  }
   /* finished books */
   .finished {
     padding: 0;
@@ -202,6 +205,7 @@
   .read-more-info p {
     font-size: 1.1rem;
   }
+
   .read-more-book-info p,
   .read-more-title {
     font-size: 1.1rem;

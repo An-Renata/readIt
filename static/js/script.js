@@ -18,6 +18,8 @@ import {
   renderSearchResults,
   renderUserBookList,
   renderUserCurrentlyReadingMobile,
+  alertBox,
+  renderWantToReadList,
 } from "./markup.js";
 
 // variable to get user search input value and render windown
@@ -30,6 +32,7 @@ const currReadingContainer = document.querySelector(
 const btnRead = document.querySelector(".btn-read");
 const btnWantToRead = document.querySelector(".btn-want-to-read");
 const btnCurrReadingMobile = document.querySelector(".btn-currently-reading");
+const errorBox = document.querySelector(".error-box");
 
 //? SEARCH BAR QUERY
 // ASYNC call for book info to display in the main window
@@ -47,6 +50,7 @@ searchBar.addEventListener("keypress", async (e) => {
       // Empty search bar value after search results are shown
       searchBar.value = "";
       // Render search results in the UI as unordered list
+      //!!!!!!!!!!!!
       searchResults.forEach((book) => {
         // Returns HTML markup
         const html = renderSearchResults(book);
@@ -56,30 +60,13 @@ searchBar.addEventListener("keypress", async (e) => {
         spinner.classList.remove("loader");
       });
     } catch (err) {
-      alert("No book found!");
       spinner.classList.remove("loader");
-      console.log("error occured");
+      renderBooks.innerHTML = `No books found. Error occured searching for book.`;
+      alertBox(renderBooks);
+      throw new Error("Error occured searching for books", err);
     }
   }
 });
-
-//!!!!!!!!!!!! TESTING
-// const btnMainBook = document.querySelectorAll(".btn-main-book");
-
-// btnMainBook.forEach((section) => {
-//   const buttonAdd = section.querySelectorAll(".add-btn");
-
-//   buttonAdd.forEach((btn) => {
-//     btn.addEventListener("click", () => {
-//       buttonAdd.forEach((button) => {
-//         if (button !== btn) {
-//           button.classList.remove("added");
-//         }
-//       });
-//       btn.classList.toggle("added");
-//     });
-//   });
-// });
 
 //? SHOW MORE BUTTON
 // Handle pop up window when user clicks on the show more button
@@ -108,7 +95,13 @@ document.addEventListener("click", async (e) => {
       spinner.classList.remove("loader");
       showMore = true;
     } catch (err) {
-      console.log("Error occured", err);
+      // Remove loader and render the error message in front of the main app window
+      spinner.classList.remove("loader");
+
+      errorBox.innerHTML = "Something went wrong! Try again later.";
+      // Function sets timer and changes opacity of the box
+      alertBox(errorBox);
+      throw new Error("Something went wrong! Try again later", err);
     }
   }
   // if user clicks outside the box the window will close
@@ -156,39 +149,51 @@ document.addEventListener("click", async (e) => {
   if (!btnCurrentlyReading) return;
 
   spinner.classList.add("loader");
+
   try {
     // Get the dataset book key from the selected book
     const key = btnCurrentlyReading.dataset.bookKey;
     // Call function to compare currently-reading books book_key with the key value
-    if (isBookAlreadyAdded(key, currReadingContainer)) {
-      alert("Book is already added");
+    if (isBookAlreadyAdded(key, currReadingContainer, ".currently-reading")) {
+      // Select div container to store error message
+      errorBox.innerHTML =
+        "This book is already in the currently reading list!";
+      // Function sets timer and changes opacity of the box
+      alertBox(errorBox);
+
       spinner.classList.remove("loader");
       return;
-    } else {
-      // !!!!!!!!!!!!!
-      // btnCurrentlyReading.disabled = "true";
-      // Get info about the book to save in the database
-      const bookData = await renderMoreInfo(key);
-      // Send data about selected book to the server and save it
-      await sendCurrentlyReading(bookData);
-      // Fetching data from the server side about currently reading books to render on the UI
-      const getBook = await fetch("/reading");
-      const books = await getBook.json();
-      // Take the last added book from the list
-      const lastAdded = books.slice(-1);
-      // Render result in the UI
-      lastAdded.forEach((book) => {
-        renderCurrentlyReading(book, currReadingContainer);
-      });
-
-      // Handle default HMTL markup if there is the list of books
-      if (defaultHTML) {
-        defaultHTML.remove();
+      // Checking if currently reading button is clicked in the want-to-read window.
+      // If it's cliked there, it should delete the info about the book in the container and the following code is rendered
+    } else if (isBookAlreadyAdded(key, renderBooks, ".finished")) {
+      if (btnCurrentlyReading.closest(".finished")) {
+        btnCurrentlyReading.closest(".finished").remove();
       }
-      spinner.classList.remove("loader");
     }
+    // Get info about the book to save in the database
+    const bookData = await renderMoreInfo(key);
+    // Send data about selected book to the server and save it
+    await sendCurrentlyReading(bookData);
+    // Fetching data from the server side about currently reading books to render on the UI
+    const getBook = await fetch("/reading");
+    const books = await getBook.json();
+    // Take the last added book from the list
+    const lastAdded = books.slice(-1);
+    // Render result in the UI
+    lastAdded.forEach((book) => {
+      renderCurrentlyReading(book, currReadingContainer);
+    });
+
+    // Handle default HMTL markup if there is the list of books
+    if (defaultHTML) {
+      defaultHTML.remove();
+    }
+    spinner.classList.remove("loader");
   } catch (err) {
-    console.log("Error occured in script.js", err);
+    renderBooks.innerHTML =
+      "An error occured while adding the book. Please try again later!";
+    alertBox(renderBooks);
+    throw new Error("An error occured", err);
   }
 });
 
@@ -211,7 +216,7 @@ document.addEventListener("click", async (e) => {
     await sendWantToRead(bookData);
 
     // If Book is already on the currently reading list and user clicks want-to-read, remove the book from currently while in the backend it is inserted in "want to read" shelf
-    if (isBookAlreadyAdded(key, currReadingContainer)) {
+    if (isBookAlreadyAdded(key, currReadingContainer, ".currently-reading")) {
       // Select all currently-reading sections
       const removeEl = document.querySelectorAll(".currently-reading");
       // Loop through each of them and search for the same key
@@ -221,6 +226,10 @@ document.addEventListener("click", async (e) => {
         }
       }
     }
+    // Display box when user clicks on the button
+    errorBox.innerHTML = "Added";
+    alertBox(errorBox);
+
     // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
     if (checkIfEmpty(currReadingContainer)) {
       currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
@@ -228,7 +237,10 @@ document.addEventListener("click", async (e) => {
 
     spinner.classList.remove("loader");
   } catch (err) {
-    console.log(err);
+    renderBooks.innerHTML =
+      "An error occured while adding the book. Please try again later!";
+    alertBox(renderBooks);
+    throw new Error("An error occured", err);
   }
 });
 
@@ -248,7 +260,7 @@ document.addEventListener("click", async (e) => {
     // Send book data to the server side to insert a new book or update its status
     await addFinished(bookData);
 
-    if (isBookAlreadyAdded(key, currReadingContainer)) {
+    if (isBookAlreadyAdded(key, currReadingContainer, ".currently-reading")) {
       // Select all currently-reading sections
       const removeEl = document.querySelectorAll(".currently-reading");
       // Loop through each of them and search for the same key
@@ -263,8 +275,16 @@ document.addEventListener("click", async (e) => {
     }
     // Remove spinner when book is added/updated
     spinner.classList.remove("loader");
+
+    // Display box when user clicks on the button
+    errorBox.innerHTML = "Added";
+    alertBox(errorBox);
   } catch (err) {
-    console.log(err);
+    renderBooks.innerHTML =
+      "An error occured while adding the book. Please try again later!";
+    alertBox(renderBooks);
+    spinner.classList.remove("loader");
+    throw new Error("An error occured", err);
   }
 });
 
@@ -283,15 +303,18 @@ document.addEventListener("click", async (e) => {
   // Sending information about the to the server with the book_key
   await sendFinishedBook(key);
   // Remove currently reading book from the list in the UI
-  if (isBookAlreadyAdded(key, currReadingContainer)) {
+  if (isBookAlreadyAdded(key, currReadingContainer, ".currently-reading")) {
     if (btnFinished.closest(".currently-reading")) {
       btnFinished.closest(".currently-reading").remove();
-    } else {
+    }
+    // Check if finish button is in currently-reading box, or want-to-read box
+  }
+  if (isBookAlreadyAdded(key, renderBooks, ".finished")) {
+    if (btnFinished.closest(".finished")) {
+      console.log(btnFinished.closest(".finished"));
       btnFinished.closest(".finished").remove();
     }
   }
-  // if (currReading && currReading.dataset.bookKey === key) {
-  // }
   // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
   if (checkIfEmpty(currReadingContainer)) {
     currReadingContainer.innerHTML = renderDefaultCurrentlyReading();
@@ -379,7 +402,8 @@ btnWantToRead.addEventListener("click", async function () {
   // Loop through the list of books to display them as <li></li> elements
   toReadBook.forEach((el) => {
     // Function returns HTML markup as unordered list
-    const html = renderUserBookList(el);
+    const html = renderWantToReadList(el);
+    console.log(el);
     // Insert HTML markup to the UI
     renderBooks.insertAdjacentHTML("beforeend", html);
   });
@@ -401,4 +425,10 @@ btnCurrReadingMobile.addEventListener("click", async function () {
     // Insert HTML markup to the UI
     renderBooks.insertAdjacentHTML("beforeend", html);
   });
+});
+
+document.addEventListener("click", async function (e) {
+  const btnFinishedWantToRead = e.target.closest(".btn-want-to-read-finished");
+
+  if (!btnFinishedWantToRead);
 });

@@ -207,6 +207,7 @@ body {
 .btn-cancel:hover {
   background-color: var(--bright-cement-color);
 }
+
 /** END OF CURRENTLY READING BOOK BOX */
 /* .................................. */
 
@@ -456,6 +457,20 @@ body {
   }
 }
 
+#to-read-box-finished {
+  background-color: var(--bright-cement-color);
+  padding: 5px;
+  font-size: 1.2rem;
+  border: 1px solid var(--bright-yellow-color);
+  letter-spacing: 0;
+  font-weight: 500;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.mobile-query {
+  margin-right: 10px;
+}
+
 /* FINISHED BOOKS */
 .finished {
   display: flex;
@@ -482,11 +497,14 @@ body {
   font-size: 1.2rem;
 }
 
-.btn-cancel-bookshelf {
-  padding: 10px 15px;
-  font-weight: 600;
-  margin-right: 10px;
+.btn-cancel-bookshelf,
+#btn-delete-bookshelf {
+  letter-spacing: 0;
   background-color: var(--bright-yellow-color);
+}
+#btn-delete-bookshelf {
+  margin-right: 10px;
+  padding: 10px 15px;
 }
 .transition {
   transition: all 0.3s;
@@ -494,4 +512,23 @@ body {
 
 .added {
   background-color: red;
+}
+
+/* !!!! ERROR MESSAGE !!!! */
+
+.error-box {
+  text-align: center;
+  background-color: var(--bright-cement-color);
+  border-radius: var(--border-radius-box);
+  font-size: 2rem;
+  color: var(--red-color);
+  z-index: 100;
+  padding: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Change opacity on click */
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }

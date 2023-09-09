@@ -219,7 +219,7 @@ def insert_to_bookshelf():
     userID = session["user_id"]
     # Getting data from the JS (book key) about finished book
     book_key = request.json
-    # ! KODAS KEIČIASI TIKRINTI
+   
     # Update the status of the book to "Read"
     db.execute("UPDATE readings SET status = ? WHERE user_id = ? AND book_key = ?", status[1], userID, book_key)
 
@@ -315,4 +315,3 @@ def addBook():
         db.execute("UPDATE readings SET status = ? WHERE user_id = ? AND title = ?", status[1], userID, book_data["title"])
 
     return redirect("/")
-    

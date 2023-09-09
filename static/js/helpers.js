@@ -51,9 +51,9 @@ const renderCurrentlyReading = function (book, container) {
 
 //? CHECK IF BOOK CURRENTLY READING TO AVOID RECURRENCE
 // Looping through currently reading container to check if the same book user wants to add are already in the list
-const isBookAlreadyAdded = function (key, container) {
+const isBookAlreadyAdded = function (key, container, attr) {
   // Select currently reading books
-  const booksInCurrReading = container.querySelectorAll(".currently-reading");
+  const booksInCurrReading = container.querySelectorAll(attr);
   // Compare the dataset book keys with the key from "add-currently-reading" button
   for (const book of booksInCurrReading) {
     if (book.dataset.bookKey === key) {
