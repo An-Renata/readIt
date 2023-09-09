@@ -156,7 +156,12 @@ const renderUserCurrentlyReadingMobile = (book) => {
             </div>
           </div>`;
 };
-
+const renderNoBooksInTheList = () => {
+  return `<div class="search-default-layout">
+            <img src="../static/img/no-books-added.svg" alt="Searching logo" width="150" />
+            <p class="search-books-default">No books yet</p>
+          </div>;`;
+};
 const alertBox = (box) => {
   box.style.opacity = 1; // Show the error box
   setTimeout(() => {
@@ -172,4 +177,5 @@ export {
   renderUserCurrentlyReadingMobile,
   alertBox,
   renderWantToReadList,
+  renderNoBooksInTheList,
 };

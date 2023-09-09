@@ -20,6 +20,7 @@ import {
   renderUserCurrentlyReadingMobile,
   alertBox,
   renderWantToReadList,
+  renderNoBooksInTheList,
 } from "./markup.js";
 
 // variable to get user search input value and render windown
@@ -168,6 +169,11 @@ document.addEventListener("click", async (e) => {
     } else if (isBookAlreadyAdded(key, renderBooks, ".finished")) {
       if (btnCurrentlyReading.closest(".finished")) {
         btnCurrentlyReading.closest(".finished").remove();
+
+        // If no books left in the want to read container, render default HTML layout
+        if (checkIfEmpty(renderBooks)) {
+          renderBooks.innerHTML = renderNoBooksInTheList();
+        }
       }
     }
     // Get info about the book to save in the database
@@ -311,8 +317,12 @@ document.addEventListener("click", async (e) => {
   }
   if (isBookAlreadyAdded(key, renderBooks, ".finished")) {
     if (btnFinished.closest(".finished")) {
-      console.log(btnFinished.closest(".finished"));
       btnFinished.closest(".finished").remove();
+
+      // If no books left in the want to read container, render default HTML layout
+      if (checkIfEmpty(renderBooks)) {
+        renderBooks.innerHTML = renderNoBooksInTheList();
+      }
     }
   }
   // Function returns boolean value if its true this means that the currReadingContainer is empty so the default HTML markup should be rendered
@@ -358,18 +368,20 @@ btnRead.addEventListener("click", async function () {
   const res = await fetch("/bookshelf");
   const finishedBooks = await res.json();
 
+  renderBooks.innerHTML = renderNoBooksInTheList();
   // Delete any previous html if there is any
   // It could display users search results.
   // The previous HTML should be deleted to insert the users readings
-  renderBooks.innerHTML = "";
-
-  // Loop through all book elements to render the result in the UI
-  finishedBooks.forEach((el) => {
-    // Function returns HTML layout as <li><li>
-    const html = renderUserBookList(el);
-    // Render data in the main window of the app
-    renderBooks.insertAdjacentHTML("beforeend", html);
-  });
+  if (finishedBooks.length > 0) {
+    renderBooks.innerHTML = "";
+    // Loop through all book elements to render the result in the UI
+    finishedBooks.forEach((el) => {
+      // Function returns HTML layout as <li><li>
+      const html = renderUserBookList(el);
+      // Render data in the main window of the app
+      renderBooks.insertAdjacentHTML("beforeend", html);
+    });
+  }
 });
 
 //? DELETE BOOK FROM BOOKSHELF
@@ -386,6 +398,10 @@ document.addEventListener("click", async function (e) {
 
   // Delete the selected book whole innerHTML
   btnDeleteBookshelf.closest(".finished").remove();
+  // If no books left in the bookshelf, render default HTML layout
+  if (checkIfEmpty(renderBooks)) {
+    renderBooks.innerHTML = renderNoBooksInTheList();
+  }
 });
 
 //? WANT TO READ CONTAINER
@@ -398,15 +414,20 @@ btnWantToRead.addEventListener("click", async function () {
   const toReadBook = await res.json();
 
   // Empty renderBooks HTML before showing want to read window if a user used search bar or the bookshelf was opened
-  renderBooks.innerHTML = "";
-  // Loop through the list of books to display them as <li></li> elements
-  toReadBook.forEach((el) => {
-    // Function returns HTML markup as unordered list
-    const html = renderWantToReadList(el);
-    console.log(el);
-    // Insert HTML markup to the UI
-    renderBooks.insertAdjacentHTML("beforeend", html);
-  });
+  renderBooks.innerHTML = renderNoBooksInTheList();
+
+  if (toReadBook.length > 0) {
+    // Remove previous default HTML layout
+    renderBooks.innerHTML = "";
+    // Loop through the list of books to display them as <li></li> elements
+    toReadBook.forEach((el) => {
+      // Function returns HTML markup as unordered list
+      const html = renderWantToReadList(el);
+      console.log(el);
+      // Insert HTML markup to the UI
+      renderBooks.insertAdjacentHTML("beforeend", html);
+    });
+  }
 });
 
 //? CURRENTLY READING CONTAINER (MOBILE VERSION)
@@ -419,16 +440,14 @@ btnCurrReadingMobile.addEventListener("click", async function () {
   // Empty renderBooks HTML before showing want to read window if a user used search bar or the bookshelf was opened
   renderBooks.innerHTML = "";
 
-  readingNow.forEach((el) => {
-    // Function returns HTML markup as unordered list
-    const html = renderUserCurrentlyReadingMobile(el);
-    // Insert HTML markup to the UI
-    renderBooks.insertAdjacentHTML("beforeend", html);
-  });
-});
-
-document.addEventListener("click", async function (e) {
-  const btnFinishedWantToRead = e.target.closest(".btn-want-to-read-finished");
-
-  if (!btnFinishedWantToRead);
+  if (readingNow.length > 0) {
+    readingNow.forEach((el) => {
+      // Function returns HTML markup as unordered list
+      const html = renderUserCurrentlyReadingMobile(el);
+      // Insert HTML markup to the UI
+      renderBooks.insertAdjacentHTML("beforeend", html);
+    });
+  } else {
+    renderBooks.innerHTML = renderNoBooksInTheList();
+  }
 });
