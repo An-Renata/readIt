@@ -54,7 +54,9 @@
 
 .login-form small {
   margin-bottom: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ea5167;
 }
 .login {
   margin-bottom: 0.5rem;
