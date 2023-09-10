@@ -37,6 +37,8 @@ CREATE TABLE users (
 
 The log in form requires `username` and `password`. Similar to the user registration form, it also handles errors if the user submits an empty form or inputs an incorrect `username` or `password`.
 
+![] (https://github.com/An-Renata/readIt/blob/main/app_screenshots/Animation.gif)
+
 #### Search bar
 
 The user can search books based on **title** or **author**. The search results are rendered on the main app window with this information for each book:
