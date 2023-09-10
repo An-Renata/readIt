@@ -1,6 +1,10 @@
-# CS50's Introduction to Computer Science _final project_
-
 # ReadIt - book app
+
+## CS50's Introduction to Computer Science _final project_
+
+#### Video Demo: <https://youtu.be/nKzPCwjVdz4>
+
+#### Description:
 
 A book app, where user can create an account and track their own readings (currently reading, read and want to read). It's like the [Goodreads](https://www.goodreads.com/) app, just much more simpler and without an access to other users data. As I embarked on my journey with the CS50 course, this project has consistently occupied my thoughts, exploring how I could bring it to life. It represents the starting point of my journey into working dynamically with both back-end and front-end technologies.
 
