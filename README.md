@@ -2,7 +2,7 @@
 
 ## CS50's Introduction to Computer Science _final project_
 
-#### Video Demo: <https://youtu.be/nKzPCwjVdz4>
+#### Video Demo: <https://youtu.be/xpF2rAq_qOY>
 
 #### Description:
 
