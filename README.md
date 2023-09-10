@@ -37,7 +37,7 @@ CREATE TABLE users (
 
 The log in form requires `username` and `password`. Similar to the user registration form, it also handles errors if the user submits an empty form or inputs an incorrect `username` or `password`.
 
-![](https://github.com/An-Renata/readIt/blob/main/app_screenshots/Animation.gif)
+![](https://github.com/An-Renata/readIt/blob/main/app_screenshots/animation.gif)
 
 #### Search bar
 
