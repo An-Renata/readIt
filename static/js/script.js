@@ -35,12 +35,21 @@ const btnWantToRead = document.querySelector(".btn-want-to-read");
 const btnCurrReadingMobile = document.querySelector(".btn-currently-reading");
 const errorBox = document.querySelector(".error-box");
 
+let currentItems = 2;
+let previuosItems = 0;
+const loadMore = document.querySelector(".load-more");
+
+// loadMoref();
 //? SEARCH BAR QUERY
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
   // Listen for a key "Enter" and do not call following code if the input is empty
   if (e.key === "Enter" && searchBar.value !== "") {
+    currentItems = 10;
+    previuosItems = 0;
     // Empty any previous HTML markup if any
+    loadMore.style.display = "block";
+
     renderBooks.innerHTML = "";
     // Loader is on while searching for results
     spinner.classList.add("loader");
@@ -48,17 +57,47 @@ searchBar.addEventListener("keypress", async (e) => {
       // Query for a book.
       // getBook function fetches a book based on the user input value
       const searchResults = await getBook(searchBar.value);
+      console.log(searchResults.length);
       // Empty search bar value after search results are shown
       searchBar.value = "";
       // Render search results in the UI as unordered list
       //!!!!!!!!!!!!
-      searchResults.forEach((book) => {
+      console.log(searchResults);
+      let topTen = searchResults.slice(previuosItems, currentItems);
+
+      topTen.forEach((book) => {
         // Returns HTML markup
         const html = renderSearchResults(book);
 
         renderBooks.insertAdjacentHTML("beforeend", html);
         // Remove spinner after search results shown
         spinner.classList.remove("loader");
+      });
+
+      console.log("AFTER first render : ", previuosItems, currentItems);
+
+      loadMore.addEventListener("click", () => {
+        previuosItems += 10;
+        currentItems += 10;
+
+        const loadMoreEl = searchResults.slice(previuosItems, currentItems);
+        // loadMore.addEventListener("click", () => {
+        loadMoreEl.forEach((book) => {
+          // Returns HTML markup
+          const html = renderSearchResults(book);
+
+          renderBooks.insertAdjacentHTML("beforeend", html);
+          // Remove spinner after search results shown
+          spinner.classList.remove("loader");
+        });
+        console.log(currentItems);
+        if (
+          currentItems === searchResults.length ||
+          currentItems > searchResults.length
+        ) {
+          loadMore.style.display = "none";
+          return;
+        }
       });
     } catch (err) {
       spinner.classList.remove("loader");
@@ -397,7 +436,7 @@ document.addEventListener("click", async function (e) {
   await deleteFinishedBook(key);
 
   // Delete the selected book whole innerHTML
-  btnDeleteBookshelf.closest(".finished").remove();
+  btnDeleteBookshelf.closest(".finished")?.remove();
   // If no books left in the bookshelf, render default HTML layout
   if (checkIfEmpty(renderBooks)) {
     renderBooks.innerHTML = renderNoBooksInTheList();

@@ -33,8 +33,8 @@ const renderSearchResults = (book) => {
       <button class="add-btn add-to-read transition " data-book-key=${
         book.key
       }>Finished</button>
-    </div>
-  </div>
+      </div>
+      </div>
 `;
 };
 

@@ -10,9 +10,12 @@ let headers = {
 const getBook = async (search) => {
   try {
     // Retrieve information about the book based on the users search query
-    const res = await fetch(`https://api2.isbndb.com/books/${search}`, {
-      headers: headers,
-    });
+    const res = await fetch(
+      `https://api2.isbndb.com/books/${search}?pageSize=100`,
+      {
+        headers: headers,
+      }
+    );
 
     // If request fails, throw an error
     if (!res.ok) {
@@ -21,10 +24,6 @@ const getBook = async (search) => {
 
     // Converting the API call into JSON format
     const data = await res.json();
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if (data.length === 0) {
-      return "No book found";
-    }
 
     // Using Promise.all ensures that all the ASYNC operations within the `map` function are executed concurrently.
     // The `map` function will create an array of promises, each representing an ASYNC operation to gather information about a book.
