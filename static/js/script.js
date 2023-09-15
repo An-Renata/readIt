@@ -35,9 +35,9 @@ const btnWantToRead = document.querySelector(".btn-want-to-read");
 const btnCurrReadingMobile = document.querySelector(".btn-currently-reading");
 const errorBox = document.querySelector(".error-box");
 
-let currentItems = 2;
+let currentItems = 10;
 let previuosItems = 0;
-const loadMore = document.querySelector(".load-more");
+const loadMore = document.querySelector("#load-more");
 
 // loadMoref();
 //? SEARCH BAR QUERY
@@ -45,43 +45,43 @@ const loadMore = document.querySelector(".load-more");
 searchBar.addEventListener("keypress", async (e) => {
   // Listen for a key "Enter" and do not call following code if the input is empty
   if (e.key === "Enter" && searchBar.value !== "") {
+    // Set how many query results to display and slice
     currentItems = 10;
     previuosItems = 0;
     // Empty any previous HTML markup if any
-    loadMore.style.display = "block";
-
     renderBooks.innerHTML = "";
+    // Do not display load more btn when searching for books
+    loadMore.style.display = "none";
     // Loader is on while searching for results
     spinner.classList.add("loader");
     try {
       // Query for a book.
       // getBook function fetches a book based on the user input value
       const searchResults = await getBook(searchBar.value);
-      console.log(searchResults.length);
       // Empty search bar value after search results are shown
       searchBar.value = "";
-      // Render search results in the UI as unordered list
-      //!!!!!!!!!!!!
-      console.log(searchResults);
-      let topTen = searchResults.slice(previuosItems, currentItems);
+      // Render first ten results of the searchResults array
+      let firstTen = searchResults.slice(previuosItems, currentItems);
 
-      topTen.forEach((book) => {
+      firstTen.forEach((book) => {
         // Returns HTML markup
         const html = renderSearchResults(book);
 
         renderBooks.insertAdjacentHTML("beforeend", html);
+        // Add load more btn when books are rendered
+        loadMore.style.display = "block";
         // Remove spinner after search results shown
         spinner.classList.remove("loader");
       });
-
-      console.log("AFTER first render : ", previuosItems, currentItems);
-
+      // Listen for a click on load more btn to load another ten results
       loadMore.addEventListener("click", () => {
+        // update variables to know from which index to take another ten results
         previuosItems += 10;
         currentItems += 10;
-
+        // Slice ten results of the origin array
         const loadMoreEl = searchResults.slice(previuosItems, currentItems);
-        // loadMore.addEventListener("click", () => {
+        // Load results after the previous results
+
         loadMoreEl.forEach((book) => {
           // Returns HTML markup
           const html = renderSearchResults(book);
@@ -90,7 +90,9 @@ searchBar.addEventListener("keypress", async (e) => {
           // Remove spinner after search results shown
           spinner.classList.remove("loader");
         });
-        console.log(currentItems);
+
+        // Check if all items are displayed
+        // If true: remove load more button
         if (
           currentItems === searchResults.length ||
           currentItems > searchResults.length
@@ -246,9 +248,12 @@ document.addEventListener("click", async (e) => {
 // Function to handle want to read book and save it on the want to read shelf
 document.addEventListener("click", async (e) => {
   // Target for the button
-  const wantToRead = e.target.closest(".add-want-to-read");
   // Create variable of currently-reading book section
   // Need to check if a selected book is not on currently reading list, if yes: update the UI
+  const wantToRead = e.target.closest(".add-want-to-read");
+  // do not show laodmore btn
+  loadMore.style.display = "none";
+
   if (!wantToRead) return;
 
   spinner.classList.add("loader");
@@ -294,6 +299,9 @@ document.addEventListener("click", async (e) => {
 document.addEventListener("click", async (e) => {
   // look for the closest button Finished
   const read = e.target.closest(".add-to-read");
+
+  // do not show laodmore btn
+  loadMore.style.display = "none";
 
   if (!read) return;
   // Add loader till try block is done executing

@@ -160,14 +160,13 @@ const renderNoBooksInTheList = () => {
   return `<div class="search-default-layout">
             <img src="../static/img/no-books-added.svg" alt="Searching logo" width="150" />
             <p class="search-books-default">No books yet</p>
-          </div>;`;
+          </div>`;
 };
 const alertBox = (box) => {
   box.style.opacity = 1; // Show the error box
   setTimeout(() => {
     box.style.opacity = 0; // Hide the error box after 3 seconds
   }, 2000);
-  // return `<p>${text}</p>`;
 };
 
 export {

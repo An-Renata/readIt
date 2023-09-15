@@ -532,3 +532,14 @@ body {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
+
+/* LOAD MORE BTN */
+.load-container {
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+}
+
+#load-more {
+  display: none;
+}
