@@ -49,6 +49,11 @@ const renderCurrentlyReading = function (book, container) {
   container.insertAdjacentHTML("beforeend", html);
 };
 
+//? LOAD MORE BUTTON HTML LAYOUT
+const loadMoreHTML = function () {
+  return `<button class="btn" id="load-more">Load more</button>`;
+};
+
 //? CHECK IF BOOK CURRENTLY READING TO AVOID RECURRENCE
 // Looping through currently reading container to check if the same book user wants to add are already in the list
 const isBookAlreadyAdded = function (key, container, attr) {
@@ -165,4 +170,5 @@ export {
   checkIfEmpty,
   addFinished,
   isBookAlreadyAdded,
+  loadMoreHTML,
 };

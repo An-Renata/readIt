@@ -12,6 +12,7 @@ import {
   checkIfEmpty,
   addFinished,
   isBookAlreadyAdded,
+  loadMoreHTML,
 } from "./helpers.js";
 import {
   renderShowMoreInfo,
@@ -34,12 +35,12 @@ const btnRead = document.querySelector(".btn-read");
 const btnWantToRead = document.querySelector(".btn-want-to-read");
 const btnCurrReadingMobile = document.querySelector(".btn-currently-reading");
 const errorBox = document.querySelector(".error-box");
+const loadMoreBtnContainer = document.querySelector(".load-container");
 
 let currentItems = 10;
 let previuosItems = 0;
 const loadMore = document.querySelector("#load-more");
 
-// loadMoref();
 //? SEARCH BAR QUERY
 // ASYNC call for book info to display in the main window
 searchBar.addEventListener("keypress", async (e) => {
@@ -50,10 +51,14 @@ searchBar.addEventListener("keypress", async (e) => {
     previuosItems = 0;
     // Empty any previous HTML markup if any
     renderBooks.innerHTML = "";
-    // Do not display load more btn when searching for books
-    loadMore.style.display = "none";
+    // Get loadMore btn html
+    // const loadMoreBtn = loadMoreHTML();
+
     // Loader is on while searching for results
     spinner.classList.add("loader");
+
+    // Add load more button to container
+    // loadMoreBtnContainer.innerHTML = loadMoreBtn;
     try {
       // Query for a book.
       // getBook function fetches a book based on the user input value
@@ -73,6 +78,7 @@ searchBar.addEventListener("keypress", async (e) => {
         // Remove spinner after search results shown
         spinner.classList.remove("loader");
       });
+
       // Listen for a click on load more btn to load another ten results
       loadMore.addEventListener("click", () => {
         // update variables to know from which index to take another ten results
@@ -81,7 +87,6 @@ searchBar.addEventListener("keypress", async (e) => {
         // Slice ten results of the origin array
         const loadMoreEl = searchResults.slice(previuosItems, currentItems);
         // Load results after the previous results
-
         loadMoreEl.forEach((book) => {
           // Returns HTML markup
           const html = renderSearchResults(book);
@@ -98,13 +103,12 @@ searchBar.addEventListener("keypress", async (e) => {
           currentItems > searchResults.length
         ) {
           loadMore.style.display = "none";
-          return;
         }
       });
     } catch (err) {
       spinner.classList.remove("loader");
       renderBooks.innerHTML = `No books found. Error occured searching for book.`;
-      alertBox(renderBooks);
+      // alertBox(renderBooks);
       throw new Error("Error occured searching for books", err);
     }
   }
@@ -251,8 +255,6 @@ document.addEventListener("click", async (e) => {
   // Create variable of currently-reading book section
   // Need to check if a selected book is not on currently reading list, if yes: update the UI
   const wantToRead = e.target.closest(".add-want-to-read");
-  // do not show laodmore btn
-  loadMore.style.display = "none";
 
   if (!wantToRead) return;
 
@@ -299,9 +301,6 @@ document.addEventListener("click", async (e) => {
 document.addEventListener("click", async (e) => {
   // look for the closest button Finished
   const read = e.target.closest(".add-to-read");
-
-  // do not show laodmore btn
-  loadMore.style.display = "none";
 
   if (!read) return;
   // Add loader till try block is done executing
@@ -416,6 +415,9 @@ btnRead.addEventListener("click", async function () {
   const finishedBooks = await res.json();
 
   renderBooks.innerHTML = renderNoBooksInTheList();
+
+  // do not show laodmore btn
+  loadMore.style.display = "none";
   // Delete any previous html if there is any
   // It could display users search results.
   // The previous HTML should be deleted to insert the users readings
@@ -462,6 +464,8 @@ btnWantToRead.addEventListener("click", async function () {
 
   // Empty renderBooks HTML before showing want to read window if a user used search bar or the bookshelf was opened
   renderBooks.innerHTML = renderNoBooksInTheList();
+  // do not show laodmore btn
+  loadMore.style.display = "none";
 
   if (toReadBook.length > 0) {
     // Remove previous default HTML layout
@@ -470,7 +474,6 @@ btnWantToRead.addEventListener("click", async function () {
     toReadBook.forEach((el) => {
       // Function returns HTML markup as unordered list
       const html = renderWantToReadList(el);
-      console.log(el);
       // Insert HTML markup to the UI
       renderBooks.insertAdjacentHTML("beforeend", html);
     });
@@ -486,6 +489,9 @@ btnCurrReadingMobile.addEventListener("click", async function () {
 
   // Empty renderBooks HTML before showing want to read window if a user used search bar or the bookshelf was opened
   renderBooks.innerHTML = "";
+
+  // do not show laodmore btn
+  loadMore.style.display = "none";
 
   if (readingNow.length > 0) {
     readingNow.forEach((el) => {
